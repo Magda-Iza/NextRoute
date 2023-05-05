@@ -1,4 +1,4 @@
-package ztw.nextapp;
+package ztw.nextapp.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +13,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "base")
+@MappedSuperclass
 public class BaseEntity implements Serializable {
 
     @Id

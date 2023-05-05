@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class NextappApplication {
+public class NextRouteApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(NextappApplication.class, args);
+		SpringApplication.run(NextRouteApplication.class, args);
 	}
 
 }

@@ -1,11 +1,12 @@
 package ztw.nextapp.services;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ztw.nextapp.domain.Vehicle;
+import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.repository.VehicleRepository;
 import ztw.nextapp.web.mapper.VehicleMapper;
 import ztw.nextapp.web.model.VehicleDto;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class VehicleServiceTest {
@@ -50,16 +52,79 @@ public class VehicleServiceTest {
         vehicle4.setCapacity(400.0);
     }
 
-    @Test
-    public void findVehiclesForRouteOneVehicleSameLoadTest() {
-        // given
-        Double load = 100.0;
+    @BeforeEach
+    public void setUp() {
+        vehicles.clear();
         vehicles.add(vehicle1);
         vehicles.add(vehicle2);
         vehicles.add(vehicle3);
         vehicles.add(vehicle4);
+    }
+
+    @Test
+    public void findVehiclesForRouteOneVehicleSameLoadTest() {
+        // given
+        Double load = 100.0;
 
         // then
-        assertEquals(1, vehicleService.findVehiclesForRoute(load).size());
+        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+        assertEquals(1, expectedVehicles.size());
+        assertEquals(1, expectedVehicles.get(0).getId());
+    }
+
+    @Test
+    public void findVehiclesForRouteOneVehicleSmallerLoadTest() {
+        // given
+        Double load = 50.0;
+
+        // then
+        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+        assertEquals(1, expectedVehicles.size());
+        assertEquals(1, expectedVehicles.get(0).getId());
+    }
+
+    @Test
+    public void findVehiclesForRouteOneVehicleBiggerLoadTest() {
+        // given
+        Double load = 150.0;
+
+        // then
+        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+        assertEquals(1, expectedVehicles.size());
+        assertEquals(2, expectedVehicles.get(0).getId());
+    }
+
+    @Test
+    public void findVehiclesForRouteOneVehicleMiddleListTest() {
+        // given
+        Double load = 250.0;
+
+        // then
+        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+        assertEquals(1, expectedVehicles.size());
+        assertEquals(3, expectedVehicles.get(0).getId());
+    }
+
+    @Test
+    public void findVehiclesForRouteManyVehiclesTest() {
+        // given
+        Double load = 950.0;
+
+        // then
+        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+        assertEquals(4, expectedVehicles.size());
+        assert(expectedVehicles.contains(vehicle1));
+        assert(expectedVehicles.contains(vehicle2));
+        assert(expectedVehicles.contains(vehicle3));
+        assert(expectedVehicles.contains(vehicle4));
+    }
+
+    @Test
+    public void findVehiclesForRouteTooBigLoadTest() {
+        // given
+        Double load = 1500.0;
+
+        // then
+        assertThrows(NotEnoughVehiclesException.class, () -> vehicleService.findVehiclesForRouteHelper(load, vehicles));
     }
 }

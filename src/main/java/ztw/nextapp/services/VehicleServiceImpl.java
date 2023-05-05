@@ -2,6 +2,7 @@ package ztw.nextapp.services;
 
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Vehicle;
+import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.repository.VehicleRepository;
 import ztw.nextapp.web.mapper.VehicleMapper;
 import ztw.nextapp.web.model.VehicleDto;
@@ -54,8 +55,7 @@ public class VehicleServiceImpl implements VehicleService {
         List<VehicleDto> allVehicles = findAll();
         List<VehicleDto> vehiclesForRoute;
 
-        allVehicles.sort(Comparator.comparing(VehicleDto::getCapacity));
-        vehiclesForRoute = findVehiclesForRoute(load, allVehicles);
+        vehiclesForRoute = findVehiclesForRouteHelper(load, allVehicles);
 
         return vehiclesForRoute;
     }
@@ -79,7 +79,8 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicles.get(left);
     }
 
-    private List<VehicleDto> findVehiclesForRoute(Double load, List<VehicleDto> vehicles) {
+    public List<VehicleDto> findVehiclesForRouteHelper(Double load, List<VehicleDto> vehicles) {
+        vehicles.sort(Comparator.comparing(VehicleDto::getCapacity));
         List<VehicleDto> vehiclesForRoute = new ArrayList<>();
         Double currentLoad = load;
 
@@ -94,6 +95,10 @@ public class VehicleServiceImpl implements VehicleService {
                 currentLoad -= vehicle.getCapacity();
                 vehicles.remove(vehicle);
             }
+        }
+
+        if (currentLoad > 0) {
+            throw new NotEnoughVehiclesException("Not enough vehicles for this route - load bigger than available vehicles capacity");
         }
 
         return vehiclesForRoute;

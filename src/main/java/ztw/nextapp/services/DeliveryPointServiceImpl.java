@@ -1,9 +1,10 @@
 package ztw.nextapp.services;
 
+import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.DeliveryPoint;
-
 import java.util.Set;
 
+@Service
 public class DeliveryPointServiceImpl implements DeliveryPointService{
     @Override
     public Set<DeliveryPoint> findAll() {

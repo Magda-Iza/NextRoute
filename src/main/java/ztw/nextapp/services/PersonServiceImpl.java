@@ -1,11 +1,13 @@
 package ztw.nextapp.services;
 
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Person;
 import ztw.nextapp.repository.PersonRepository;
 
 import java.util.Set;
 
+@Service
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;

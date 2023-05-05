@@ -1,10 +1,8 @@
 package ztw.nextapp.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +15,10 @@ import java.util.List;
 @Table(name = "employees")
 public class Person extends BaseEntity {
 
-    public Person(Long id, String name, String telephone, String email, String password, ApplicationUserRole userRole) {
+    public Person(Long id, String name, String telephone, ApplicationUserRole userRole) {
         super(id);
         this.name = name;
         this.telephone = telephone;
-        this.email = email;
-        this.password = password;
         this.userRole = userRole;
     }
 
@@ -31,12 +27,6 @@ public class Person extends BaseEntity {
 
     @Column(name = "telephone")
     private String telephone;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
 
     @Column(name = "driver_license")
     private String driverLicense;
@@ -52,14 +42,6 @@ public class Person extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<Delivery> drivers = new ArrayList<>();
-
-    public String getUsername() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     public boolean isAccountNonExpired() {
         return true;

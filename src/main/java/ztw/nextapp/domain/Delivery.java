@@ -18,10 +18,15 @@ import java.util.List;
 public class Delivery extends BaseEntity {
 
     @Builder
-    public Delivery(Long id, LocalDate delivery_start, LocalDate delivery_end) {
+    public Delivery(Long id, LocalDate delivery_start, LocalDate delivery_end, Double capacity, Person employee, Person person, Route route, List<DeliveryVehicle> deliveryVehicles) {
         super(id);
         this.delivery_start = delivery_start;
         this.delivery_end = delivery_end;
+        this.capacity = capacity;
+        this.employee = employee;
+        this.person = person;
+        this.route = route;
+        this.deliveryVehicles = deliveryVehicles;
     }
 
     @Column(name = "delivery_start_date")
@@ -30,9 +35,9 @@ public class Delivery extends BaseEntity {
     @Column(name = "delivery_end_date")
     private LocalDate delivery_end;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "shipment_id", referencedColumnName = "id")
-    private Shipment shipment;
+    @Column(name = "capacity")
+    private Double capacity;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")

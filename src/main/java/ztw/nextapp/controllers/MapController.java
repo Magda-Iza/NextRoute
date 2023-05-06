@@ -28,12 +28,12 @@ public class MapController {
 
     @GetMapping("/testApi")
     public String testApi() {
-        String origin = "Bezpieczna, Wrocław, Polska";
-        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
+        String origin = "Beżowa 5, Wrocław, Polska";
+        String destination = "Zabraniecka 20, Warszawa, Polska";
         ArrayList<String> waypoints = new ArrayList<>();
-        waypoints.add("Kościuszki, Wrocław, Polska");
-        waypoints.add("Kleczkowska, Wrocław, Polska");
-        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
+//        waypoints.add("Kościuszki, Wrocław, Polska");
+//        waypoints.add("Kleczkowska, Wrocław, Polska");
+//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
         routeService.createRoute("test", "test", origin, destination, waypoints);
         return "Microservice MapController is working!";
     }

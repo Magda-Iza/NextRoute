@@ -25,5 +25,4 @@ public class RoutePoint extends BaseEntity {
     @JoinColumn(name = "point_id")
     private DeliveryPoint deliveryPoint;
 
-
 }

@@ -9,6 +9,6 @@ import java.util.ArrayList;
 public interface RouteService extends BaseService<Route, Long> {
     DirectionsRoute getDirections(String origin, String destination, ArrayList<String> waypoints);
     LatLng getGeocoding(String address);
-    DirectionsRoute createRoute(String type, String capacity,
+    DirectionsRoute createRoute(String capacity, String driverId,
                      String origin, String destination, ArrayList<String> waypoints);
 }

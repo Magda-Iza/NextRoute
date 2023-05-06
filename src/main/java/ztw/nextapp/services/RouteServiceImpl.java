@@ -4,10 +4,7 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApiRequest;
-import com.google.maps.model.DirectionsResult;
-import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.LatLng;
-import com.google.maps.model.TravelMode;
+import com.google.maps.model.*;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Route;
 
@@ -78,20 +75,24 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public DirectionsRoute createRoute(String type, String capacity, String origin, String destination, ArrayList<String> waypoints) {
+    public DirectionsRoute createRoute(String capacity, String driverId, String origin, String destination, ArrayList<String> waypoints) {
         DirectionsRoute directionsRoute = getDirections(origin, destination, waypoints);
         ArrayList<String> resultRoute = new ArrayList<>();
-
+        Duration duration = new Duration();
         resultRoute.add(origin);
 
         for (int i = 0; i < directionsRoute.legs.length; i++) {
             resultRoute.add(directionsRoute.legs[i].endAddress);
+            duration.inSeconds += directionsRoute.legs[i].duration.inSeconds;
         }
 
+        System.out.println("Seconds: " + duration.inSeconds);
+        System.out.println("Minutes: " + duration.inSeconds / 60);
+        System.out.println("Hours: " + duration.inSeconds / 3600);
+        System.out.println("Summary: " + directionsRoute.summary);
         System.out.println("Route: " + directionsRoute);
         System.out.println("Route: " + resultRoute);
 
         return directionsRoute;
     }
-
 }

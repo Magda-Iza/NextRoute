@@ -3,6 +3,7 @@ package ztw.nextapp.services;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApiRequest;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
@@ -49,9 +50,6 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public DirectionsRoute getDirections(String origin, String destination, ArrayList<String> waypoints) {
-//        GeoApiContext context = new GeoApiContext.Builder()
-//                .apiKey("AIzaSyAHy9ZHFybi2s9KD46oJqQ0_ZVhoSmsexQ")
-//                .build();
         DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
         directionsApiRequest.origin(origin);
         directionsApiRequest.destination(destination);
@@ -61,8 +59,6 @@ public class RouteServiceImpl implements RouteService {
 
         try {
             DirectionsResult result = directionsApiRequest.await();
-            // kolejnosc odwiedzonych punktow
-            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
             return result.routes[0];
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,7 +66,20 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
-//    private LatLng getGeocoding(String address) {
-//
-//    }
+    public LatLng getGeocoding(String address) {
+        GeocodingApiRequest geocodingApiRequest = new GeocodingApiRequest(geoApiContext);
+        geocodingApiRequest.address(address);
+
+        try {
+            return geocodingApiRequest.await()[0].geometry.location;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void createRoute(String origin, String destination, ArrayList<String> waypoints) {
+
+    }
 }

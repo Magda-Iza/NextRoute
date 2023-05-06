@@ -1,14 +1,18 @@
 package ztw.nextapp.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
+import ztw.nextapp.domain.Delivery;
+import ztw.nextapp.domain.Vehicle;
+import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.services.DeliveryService;
 import ztw.nextapp.web.mapper.DeliveryMapper;
 import ztw.nextapp.web.model.DeliveryDto;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class DeliveryController {
@@ -21,27 +25,92 @@ public class DeliveryController {
         this.deliveryMapper = deliveryMapper;
     }
 
-    @GetMapping({"delivery", "delivery.html"})
-    public String getDeliveries(Model model) {
-        deliveryService.findAll();
-        return "xyz";
+    @GetMapping("employee/deliveries")
+    public ResponseEntity<List<DeliveryDto>> getEmployeeDeliveries() {
+        try {
+            List<DeliveryDto> deliveries = deliveryService.getDeliveries();
+
+            if (deliveries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(deliveries, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PostMapping({"delivery", "delivery.html"})
-    public String saveDelivery(DeliveryDto deliveryDto, Model model) {
-        deliveryService.save(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
-        return "xyz";
+    @GetMapping("admin/deliveries")
+    public ResponseEntity<List<DeliveryDto>> getAdminDeliveries() {
+        try {
+            List<DeliveryDto> deliveries = deliveryService.getDeliveries();
+
+            if (deliveries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(deliveries, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PutMapping({"delivery", "delivery.html"})
-    public String updateDelivery(DeliveryDto deliveryDto, Model model) {
-        deliveryService.update(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
-        return "xyz";
+    @GetMapping("driver/deliveries")
+    public ResponseEntity<List<DeliveryDto>> getDriverDeliveries() {
+        try {
+            List<DeliveryDto> deliveries = deliveryService.getDriverDeliveries(1L);
+
+            if (deliveries.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(deliveries, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @DeleteMapping({"delivery", "delivery.html"})
-    public String deleteDelivery(DeliveryDto deliveryDto, Model model) {
-        deliveryService.delete(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
-        return "xyz";
+    @GetMapping("/deliveries/{id}")
+    public ResponseEntity<DeliveryDto> getDeliveryById(@PathVariable("id") long id) {
+        DeliveryDto delivery;
+
+        try {
+            delivery = deliveryService.findDeliveryById(id);
+            return new ResponseEntity<>(delivery, HttpStatus.OK);
+        } catch(NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("deliveries")
+    public ResponseEntity<Delivery> saveDelivery(DeliveryDto deliveryDto) {
+        try {
+            Delivery delivery = deliveryService.createDelivery(deliveryDto);
+            return new ResponseEntity<>(delivery, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("deliveries/{id}")
+    public ResponseEntity<Delivery> updateDelivery(@PathVariable("id") long id, @RequestBody DeliveryDto deliveryDto) {
+        Delivery deliveryData;
+
+        try {
+            deliveryService.updateDelivery(id, deliveryDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("deliveries/{id}")
+    public ResponseEntity<HttpStatus> deleteDelivery(@PathVariable("id") long id) {
+        try {
+            deliveryService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (IllegalOperationException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 }

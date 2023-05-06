@@ -1,6 +1,11 @@
 package ztw.nextapp.services;
 
+import com.google.maps.model.DirectionsRoute;
 import ztw.nextapp.domain.Route;
 
-public interface RouteService extends BaseService<Route, Long>{
+import java.util.ArrayList;
+
+public interface RouteService extends BaseService<Route, Long> {
+    DirectionsRoute getDirections(String origin, String destination, ArrayList<String> waypoints);
+
 }

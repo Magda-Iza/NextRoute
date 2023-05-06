@@ -16,10 +16,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ztw.nextapp.web.model.geocoding.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @RestController
 public class MapController {
     private static final String API_KEY = "AIzaSyAHy9ZHFybi2s9KD46oJqQ0_ZVhoSmsexQ";
+    private GeoApiContext geoApiContext;
+
+    public MapController(GeoApiContext geoApiContext) {
+        this.geoApiContext = geoApiContext;
+    }
 
     @GetMapping("/map")
     public String map() {
@@ -65,37 +71,23 @@ public class MapController {
 //        return response.getBody();
 //    }
 
-    // use java client for google maps directions api
-//    @GetMapping("/getDirections")
-//    public DirectionsApi.Response getDirections() {
-////        @RequestParam String origin, @RequestParam ArrayList<String> waypoints
-//        String origin = "kolkata";
-//        String destination = "delhi";
-//        ArrayList<String> waypoints = new ArrayList<>();
-//        waypoints.add("mumbai");
-//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(null);
-//        directionsApiRequest.origin(origin);
-////        directionsApiRequest.destination(destination);
-//        directionsApiRequest.mode(TravelMode.valueOf("DRIVING"));
-//        directionsApiRequest.optimizeWaypoints(true);
-//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
-//
-//        ResponseEntity<DirectionsApi.Response> response = new RestTemplate().getForEntity(directionsApiRequest.toString(), DirectionsApi.Response.class);
-//        return response.getBody();
-//    }
 
     @GetMapping("/getDirections")
     public DirectionsRoute getDirections() {
-        String origin = "kolkata";
-        String destination = "delhi";
+//        @RequestParam String origin, @RequestParam String destination,
+//        @RequestParam ArrayList<String> waypoints
+        String origin = "Bezpieczna, Wrocław, Polska";
+        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
         ArrayList<String> waypoints = new ArrayList<>();
-        waypoints.add("mumbai");
+        waypoints.add("Kościuszki, Wrocław, Polska");
+        waypoints.add("Kleczkowska, Wrocław, Polska");
+        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
 
         // Create a new instance of the Directions API client
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("AIzaSyAHy9ZHFybi2s9KD46oJqQ0_ZVhoSmsexQ")
-                .build();
-        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(context);
+//        GeoApiContext context = new GeoApiContext.Builder()
+//                .apiKey("AIzaSyAHy9ZHFybi2s9KD46oJqQ0_ZVhoSmsexQ")
+//                .build();
+        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
         directionsApiRequest.origin(origin);
         directionsApiRequest.destination(destination);
         directionsApiRequest.mode(TravelMode.DRIVING);
@@ -103,18 +95,14 @@ public class MapController {
         directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
 
         try {
-            // Send the API request and get the response
             DirectionsResult result = directionsApiRequest.await();
+            // kolejnosc odwiedzonych punktow
+            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
             return result.routes[0];
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
-//    @GetMapping("/getPlacePicker")
-//    public String getPlacePicker() {
-//        return "placeAutocomplete";
-//    }
 
 }

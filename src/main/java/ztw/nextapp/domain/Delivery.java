@@ -49,7 +49,4 @@ public class Delivery extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "delivery")
     private List<DeliveryVehicle> deliveryVehicles = new ArrayList<>();
 
-
-
-
 }

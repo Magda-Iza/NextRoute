@@ -1,4 +1,4 @@
-package ztw.nextapp.repository;
+package ztw.nextapp.repositories;
 
 
 import ztw.nextapp.domain.Route;

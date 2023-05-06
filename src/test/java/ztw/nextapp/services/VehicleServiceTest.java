@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ztw.nextapp.exceptions.NotEnoughVehiclesException;
-import ztw.nextapp.repository.VehicleRepository;
+import ztw.nextapp.repositories.VehicleRepository;
 import ztw.nextapp.web.mapper.VehicleMapper;
 import ztw.nextapp.web.model.VehicleDto;
 

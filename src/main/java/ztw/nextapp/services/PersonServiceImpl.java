@@ -3,7 +3,7 @@ package ztw.nextapp.services;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Person;
-import ztw.nextapp.repository.PersonRepository;
+import ztw.nextapp.repositories.PersonRepository;
 
 import java.util.Set;
 

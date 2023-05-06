@@ -1,6 +1,5 @@
-package ztw.nextapp.repository;
+package ztw.nextapp.repositories;
 
-import ztw.nextapp.domain.Person;
 import ztw.nextapp.domain.Shipment;
 import ztw.nextapp.services.BaseService;
 

@@ -3,7 +3,7 @@ package ztw.nextapp.services;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.NotEnoughVehiclesException;
-import ztw.nextapp.repository.VehicleRepository;
+import ztw.nextapp.repositories.VehicleRepository;
 import ztw.nextapp.web.mapper.VehicleMapper;
 import ztw.nextapp.web.model.VehicleDto;
 

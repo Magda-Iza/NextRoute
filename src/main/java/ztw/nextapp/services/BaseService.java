@@ -1,5 +1,7 @@
 package ztw.nextapp.services;
 
+import ztw.nextapp.exceptions.IllegalOperationException;
+
 import java.util.Set;
 
 public interface BaseService<T, ID> {
@@ -12,5 +14,5 @@ public interface BaseService<T, ID> {
 
     void delete(T object);
 
-    void deleteById(ID id);
+    void deleteById(ID id) throws IllegalOperationException;
 }

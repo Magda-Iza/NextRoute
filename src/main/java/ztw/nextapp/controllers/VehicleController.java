@@ -42,6 +42,15 @@ public class VehicleController {
         }
     }
 
+    @GetMapping("/vehicles/delivery/{id}")
+    public ResponseEntity<List<VehicleDto>> getVehiclesByDeliveryId(@PathVariable("id") long id) {
+        List<VehicleDto> vehicles = vehicleService.findVehiclesByDeliveryId(id);
+        if (vehicles.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity<>(vehicles, HttpStatus.OK);
+    }
+
     @PostMapping("/vehicles")
     public ResponseEntity<Vehicle> createVehicle(@RequestBody VehicleDto vehicleDTO) {
         try {

@@ -36,7 +36,7 @@ public class DeliveryPointServiceImpl implements DeliveryPointService{
 
     @Override
     public void updateDeliveryPoint(long id, DeliveryPointDto pointDto) {
-        
+
     }
 
     @Override

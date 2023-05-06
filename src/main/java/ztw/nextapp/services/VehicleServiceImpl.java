@@ -79,6 +79,12 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public List<VehicleDto> findVehiclesByDeliveryId(Long id) {
+        //TODO
+        return new ArrayList<>();
+    }
+
+    @Override
     public List<VehicleDto> findVehiclesForRoute(Double load) {
         List<VehicleDto> allVehicles = findAll();
         List<VehicleDto> vehiclesForRoute;

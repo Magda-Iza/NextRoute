@@ -21,4 +21,6 @@ public interface VehicleService {
     Vehicle createVehicle(VehicleDto vehicleDTO);
 
     void updateVehicle(long id, VehicleDto vehicleDto);
+
+    List<VehicleDto> findVehiclesByDeliveryId(Long id);
 }

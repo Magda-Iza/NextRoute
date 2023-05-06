@@ -1,5 +1,6 @@
 package ztw.nextapp.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,10 +16,21 @@ import java.util.List;
 @Table(name = "employees")
 public class Person extends BaseEntity {
 
-    public Person(Long id, String name, String telephone, ApplicationUserRole userRole) {
+//    @Builder
+//    public Person(Long id, String name, String telephone, ApplicationUserRole userRole) {
+//        super(id);
+//        this.name = name;
+//        this.telephone = telephone;
+//        this.userRole = userRole;
+//    }
+
+
+    @Builder
+    public Person(Long id, String name, String telephone, String driverLicense, ApplicationUserRole userRole) {
         super(id);
         this.name = name;
         this.telephone = telephone;
+        this.driverLicense = driverLicense;
         this.userRole = userRole;
     }
 

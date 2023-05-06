@@ -9,7 +9,6 @@ import ztw.nextapp.domain.Vehicle;
 import java.util.List;
 import java.util.Optional;
 
-
 @Repository
 public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM vehicles")

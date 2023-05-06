@@ -1,5 +1,6 @@
 package ztw.nextapp.domain;
 
+import com.google.maps.model.DirectionsRoute;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,10 @@ import java.util.List;
 public class Delivery extends BaseEntity {
 
     @Builder
-    public Delivery(Long id, LocalDate delivery_start, LocalDate delivery_end, Double capacity, Person employee, Person person, Route route, List<DeliveryVehicle> deliveryVehicles) {
+    public Delivery(Long id, LocalDate deliveryStart, LocalDate deliveryEnd, Double capacity, Person employee, Person person, Route route, List<DeliveryVehicle> deliveryVehicles) {
         super(id);
-        this.delivery_start = delivery_start;
-        this.delivery_end = delivery_end;
+        this.deliveryStart = deliveryStart;
+        this.deliveryEnd = deliveryEnd;
         this.capacity = capacity;
         this.employee = employee;
         this.person = person;
@@ -30,10 +31,10 @@ public class Delivery extends BaseEntity {
     }
 
     @Column(name = "delivery_start_date")
-    private LocalDate delivery_start;
+    private LocalDate deliveryStart;
 
     @Column(name = "delivery_end_date")
-    private LocalDate delivery_end;
+    private LocalDate deliveryEnd;
 
     @Column(name = "capacity")
     private Double capacity;
@@ -53,5 +54,8 @@ public class Delivery extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "delivery")
     private List<DeliveryVehicle> deliveryVehicles = new ArrayList<>();
+
+    @Column(name = "route_map")
+    private DirectionsRoute routeMap;
 
 }

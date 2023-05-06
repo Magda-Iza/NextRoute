@@ -27,21 +27,21 @@ public class DeliveryController {
         return "xyz";
     }
 
-    @PostMapping({"delivery", "delivery.html"})
-    public String saveDelivery(DeliveryDto deliveryDto, Model model) {
-        deliveryService.save(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
-        return "xyz";
-    }
-
-    @PutMapping({"delivery", "delivery.html"})
-    public String updateDelivery(DeliveryDto deliveryDto, Model model) {
-        deliveryService.update(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
-        return "xyz";
-    }
-
-    @DeleteMapping({"delivery", "delivery.html"})
-    public String deleteDelivery(DeliveryDto deliveryDto, Model model) {
-        deliveryService.delete(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
-        return "xyz";
-    }
+//    @PostMapping({"delivery", "delivery.html"})
+//    public String saveDelivery(DeliveryDto deliveryDto, Model model) {
+//        deliveryService.save(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
+//        return "xyz";
+//    }
+//
+//    @PutMapping({"delivery", "delivery.html"})
+//    public String updateDelivery(DeliveryDto deliveryDto, Model model) {
+//        deliveryService.update(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
+//        return "xyz";
+//    }
+//
+//    @DeleteMapping({"delivery", "delivery.html"})
+//    public String deleteDelivery(DeliveryDto deliveryDto, Model model) {
+//        deliveryService.delete(deliveryMapper.deliveryDtoToDelivery(deliveryDto));
+//        return "xyz";
+//    }
 }

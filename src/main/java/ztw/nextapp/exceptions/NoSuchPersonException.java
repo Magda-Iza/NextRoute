@@ -4,16 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class NotEnoughVehiclesException extends RuntimeException {
-    public NotEnoughVehiclesException() {
+public class NoSuchPersonException extends RuntimeException {
+    public NoSuchPersonException() {
         super();
     }
 
-    public NotEnoughVehiclesException(String message) {
+    public NoSuchPersonException(String message) {
         super(message);
     }
 
-    public NotEnoughVehiclesException(String message, Throwable cause) {
+    public NoSuchPersonException(String message, Throwable cause) {
         super(message, cause);
     }
 }

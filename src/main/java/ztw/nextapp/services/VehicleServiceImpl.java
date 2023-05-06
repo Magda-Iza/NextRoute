@@ -2,14 +2,13 @@ package ztw.nextapp.services;
 
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Vehicle;
+import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.repositories.VehicleRepository;
 import ztw.nextapp.web.mapper.VehicleMapper;
 import ztw.nextapp.web.model.VehicleDto;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.*;
 
 @Service
@@ -32,7 +31,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleDto findById(Long aLong) {
-        return null;
+        return vehicleMapper.vehicleToVehicleDto(vehicleRepository.findById(aLong).get());
     }
 
     @Override
@@ -46,8 +45,37 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void deleteById(Long aLong) {
+    public void deleteById(Long id) throws IllegalOperationException {
+        Optional<Vehicle> vehicle = vehicleRepository.findById(id);
+        if(vehicle.isPresent() != false)
+            vehicleRepository.deleteById(id);
+        else
+            throw new IllegalOperationException();
+    }
 
+    @Override
+    public Vehicle createVehicle(VehicleDto vehicleDTO) {
+        Vehicle vehicle = vehicleMapper.vehicleDtoToVehicle(vehicleDTO);
+        vehicleRepository.save(vehicle);
+        return vehicle;
+    }
+
+    @Override
+    public void updateVehicle(long id, VehicleDto vehicleDto) {
+        Optional<Vehicle> vehicleData = vehicleRepository.findById(id);
+
+        if (vehicleData.isPresent()) {
+            Vehicle _vehicle = vehicleData.get();
+            _vehicle.setBrand(vehicleDto.getBrand());
+            _vehicle.setModel(vehicleDto.getModel());
+            _vehicle.setCapacity(vehicleDto.getCapacity());
+            _vehicle.setVin(vehicleDto.getVin());
+            _vehicle.setRegisterDate(vehicleDto.getRegisterDate());
+
+            vehicleRepository.save(_vehicle);
+        } else {
+            throw new NoSuchElementException("Vehicle with id '" + id + "' does not exist");
+        }
     }
 
     @Override
@@ -59,7 +87,6 @@ public class VehicleServiceImpl implements VehicleService {
 
         return vehiclesForRoute;
     }
-
 
     private VehicleDto findFirstVehicleWithCapacity(Double load, List<VehicleDto> vehicles){
         int left = 0;

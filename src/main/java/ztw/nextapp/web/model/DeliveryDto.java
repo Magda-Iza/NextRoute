@@ -4,7 +4,6 @@ import com.google.maps.model.DirectionsRoute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ztw.nextapp.domain.Person;
 
 import java.time.LocalDate;
 

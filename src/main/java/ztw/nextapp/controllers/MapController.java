@@ -4,14 +4,14 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApiRequest;
-import com.google.maps.model.DirectionsResult;
-import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.LatLng;
-import com.google.maps.model.TravelMode;
+import com.google.maps.model.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ztw.nextapp.services.RouteService;
+import ztw.nextapp.web.model.Path;
 
 import java.util.ArrayList;
 
@@ -31,9 +31,9 @@ public class MapController {
         String origin = "Beżowa 5, Wrocław, Polska";
         String destination = "Zabraniecka 20, Warszawa, Polska";
         ArrayList<String> waypoints = new ArrayList<>();
-//        waypoints.add("Kościuszki, Wrocław, Polska");
-//        waypoints.add("Kleczkowska, Wrocław, Polska");
-//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
+        waypoints.add("Kościuszki, Wrocław, Polska");
+        waypoints.add("Kleczkowska, Wrocław, Polska");
+        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
         routeService.createRoute("test", "test", origin, destination, waypoints);
         return "Microservice MapController is working!";
     }
@@ -72,8 +72,37 @@ public class MapController {
         }
     }
 
+//    @GetMapping("/getDirections")
+//    public DirectionsRoute newDirections() {
+////        @RequestParam String origin, @RequestParam String destination,
+////        @RequestParam ArrayList<String> waypoints
+//        String origin = "Bezpieczna, Wrocław, Polska";
+//        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
+//        ArrayList<String> waypoints = new ArrayList<>();
+//        waypoints.add("Kościuszki, Wrocław, Polska");
+//        waypoints.add("Kleczkowska, Wrocław, Polska");
+//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
+//
+//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
+//        directionsApiRequest.origin(origin);
+//        directionsApiRequest.destination(destination);
+//        directionsApiRequest.mode(TravelMode.DRIVING);
+//        directionsApiRequest.optimizeWaypoints(true);
+//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
+//
+//        try {
+//            DirectionsResult result = directionsApiRequest.await();
+//            // kolejnosc odwiedzonych punktow
+//            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
+//            return result.routes[0];
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
     @GetMapping("/getDirections")
-    public DirectionsRoute newDirections() {
+    public ResponseEntity<DirectionsResult> newDirections() {
 //        @RequestParam String origin, @RequestParam String destination,
 //        @RequestParam ArrayList<String> waypoints
         String origin = "Bezpieczna, Wrocław, Polska";
@@ -94,10 +123,72 @@ public class MapController {
             DirectionsResult result = directionsApiRequest.await();
             // kolejnosc odwiedzonych punktow
             // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
-            return result.routes[0];
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
+//    @GetMapping("/getDirections")
+//    public ResponseEntity<Path> newDirections() {
+////        @RequestParam String origin, @RequestParam String destination,
+////        @RequestParam ArrayList<String> waypoints
+//        String origin = "Bezpieczna, Wrocław, Polska";
+//        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
+//        ArrayList<String> waypoints = new ArrayList<>();
+//        waypoints.add("Kościuszki, Wrocław, Polska");
+//        waypoints.add("Kleczkowska, Wrocław, Polska");
+//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
+//
+//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
+//        directionsApiRequest.origin(origin);
+//        directionsApiRequest.destination(destination);
+//        directionsApiRequest.mode(TravelMode.DRIVING);
+//        directionsApiRequest.optimizeWaypoints(true);
+//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
+//
+//        try {
+//            DirectionsResult result = directionsApiRequest.await();
+//            // kolejnosc odwiedzonych punktow
+//            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
+//            Path path = new Path();
+//            path.setEncoded(result.routes[0].overviewPolyline.getEncodedPath());
+//            return new ResponseEntity<>(path, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
+//    @GetMapping("/getDirections")
+//    public ResponseEntity<Path> newDirections() {
+////        @RequestParam String origin, @RequestParam String destination,
+////        @RequestParam ArrayList<String> waypoints
+//        String origin = "Bezpieczna, Wrocław, Polska";
+//        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
+//        ArrayList<String> waypoints = new ArrayList<>();
+//        waypoints.add("Kościuszki, Wrocław, Polska");
+//        waypoints.add("Kleczkowska, Wrocław, Polska");
+//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
+//
+//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
+//        directionsApiRequest.origin(origin);
+//        directionsApiRequest.destination(destination);
+//        directionsApiRequest.mode(TravelMode.DRIVING);
+//        directionsApiRequest.optimizeWaypoints(true);
+//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
+//
+//        try {
+//            DirectionsResult result = directionsApiRequest.await();
+//            // kolejnosc odwiedzonych punktow
+//            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
+//            Path path = new Path();
+//            path.setEncoded(result.routes[0].overviewPolyline.decodePath());
+//            return new ResponseEntity<>(path, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 }

@@ -36,7 +36,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleDto save(Vehicle object) {
-        return null;
+        return vehicleMapper.vehicleToVehicleDto(vehicleRepository.save(object));
     }
 
     @Override

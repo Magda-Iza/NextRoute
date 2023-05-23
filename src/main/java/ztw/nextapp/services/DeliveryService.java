@@ -1,5 +1,6 @@
 package ztw.nextapp.services;
 
+import com.google.maps.model.DirectionsResult;
 import ztw.nextapp.domain.Delivery;
 import ztw.nextapp.domain.Person;
 import ztw.nextapp.web.model.DeliveryDto;
@@ -17,5 +18,9 @@ public interface DeliveryService extends BaseService<Delivery, Long> {
 
     List<DeliveryDto> getDriverDeliveries(Long i);
 
+    DeliveryDto getDeliverByRouteIdDriverId(Long routeId, Long driverId);
+
     DeliveryDto findDeliveryById(long id);
+
+    DirectionsResult getDirectionsResult(Long deliveryId);
 }

@@ -12,6 +12,7 @@ public interface DeliveryPointService extends BaseService<DeliveryPoint, Long> {
 
     DeliveryPointDto findPointById(long id);
 
-    List<DeliveryPointDto> getPoints();
+    List<DeliveryPointDto> getAllDeliveryPoints();
 
+    DeliveryPointDto findPointByName(String name);
 }

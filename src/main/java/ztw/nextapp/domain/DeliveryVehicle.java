@@ -19,6 +19,12 @@ public class DeliveryVehicle extends BaseEntity {
         super(id);
     }
 
+    public DeliveryVehicle(Delivery delivery, Vehicle vehicle) {
+        super();
+        this.delivery = delivery;
+        this.vehicle = vehicle;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;

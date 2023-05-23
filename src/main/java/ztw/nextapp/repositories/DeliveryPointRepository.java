@@ -31,5 +31,6 @@ public interface DeliveryPointRepository extends CrudRepository<DeliveryPoint, L
     void update(Long id, String name, String latitude, String longitude);
 
     @Query(nativeQuery = true, value = "SELECT * FROM delivery_points WHERE name = ?1")
-    List<DeliveryPoint> findByName(String name);
+    Optional<DeliveryPoint> findByName(String name);
+
 }

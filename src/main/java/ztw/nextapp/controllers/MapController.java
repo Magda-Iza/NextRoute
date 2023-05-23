@@ -8,22 +8,26 @@ import com.google.maps.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import ztw.nextapp.domain.Delivery;
+import ztw.nextapp.domain.Route;
+import ztw.nextapp.services.DeliveryService;
 import ztw.nextapp.services.RouteService;
-import ztw.nextapp.web.model.Path;
 
 import java.util.ArrayList;
 
 @RestController
 public class MapController {
     private static final String API_KEY = "AIzaSyAHy9ZHFybi2s9KD46oJqQ0_ZVhoSmsexQ";
-    private GeoApiContext geoApiContext;
-    private RouteService routeService;
+    private final GeoApiContext geoApiContext;
+    private final RouteService routeService;
+    private final DeliveryService deliveryService;;
 
-    public MapController(GeoApiContext geoApiContext, RouteService routeService) {
+    public MapController(GeoApiContext geoApiContext, RouteService routeService, DeliveryService deliveryService) {
         this.geoApiContext = geoApiContext;
         this.routeService = routeService;
+        this.deliveryService = deliveryService;
     }
 
     @GetMapping("/testApi")
@@ -34,7 +38,7 @@ public class MapController {
         waypoints.add("Kościuszki, Wrocław, Polska");
         waypoints.add("Kleczkowska, Wrocław, Polska");
         waypoints.add("plac Grunwaldzki, Wrocław, Polska");
-        routeService.createRoute("test", "test", origin, destination, waypoints);
+//        routeService.createRoute("test", "test", origin, destination, waypoints);
         return "Microservice MapController is working!";
     }
 
@@ -111,6 +115,8 @@ public class MapController {
         waypoints.add("Kościuszki, Wrocław, Polska");
         waypoints.add("Kleczkowska, Wrocław, Polska");
         waypoints.add("plac Grunwaldzki, Wrocław, Polska");
+        waypoints.add("Szkolna 20, Wisznia Mała, Polska");
+        waypoints.add("Warszawa, Polska");
 
         DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
         directionsApiRequest.origin(origin);
@@ -126,7 +132,32 @@ public class MapController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/delivery/route/{id}")
+    public ResponseEntity<DirectionsResult> getDeliveryDirectionsResult(@PathVariable String id) {
+        try {
+            Long deliveryIdLong = Long.parseLong(id);
+            Delivery delivery = deliveryService.findById(deliveryIdLong);
+            DirectionsResult result = routeService.getDirectionsResult(delivery.getRoute().getId());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/route/{id}")
+    public ResponseEntity<DirectionsResult> getRouteDirectionsResult(@PathVariable String id) {
+        try {
+            Route route = routeService.findById(Long.parseLong(id));
+            DirectionsResult result = routeService.getDirectionsResult(route.getId());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

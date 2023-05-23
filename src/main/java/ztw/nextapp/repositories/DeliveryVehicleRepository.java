@@ -26,6 +26,10 @@ public interface DeliveryVehicleRepository extends CrudRepository<DeliveryVehicl
     void delete(Long id);
 
     @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM delivery_vehicle WHERE delivery_id = ?1")
+    void deleteByDeliveryId(Long deliveryId);
+
+    @Modifying
     @Query(nativeQuery = true, value = "UPDATE delivery_vehicle SET delivery_id = ?2, vehicle_id = ?3 WHERE id = ?1")
     void update(Long id, Long delivery_id, Long vehicle_id);
 

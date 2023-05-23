@@ -1,5 +1,6 @@
 package ztw.nextapp.web.model;
 
+import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,4 @@ public class DeliveryDto {
         private PersonDto employee;
         private PersonDto person;
         private Long routeId;
-        private int vehicleNumber;
-        private DirectionsRoute routeMap;
 }

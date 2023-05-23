@@ -1,6 +1,5 @@
 package ztw.nextapp.domain;
 
-import com.google.maps.model.DirectionsRoute;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +38,6 @@ public class Delivery extends BaseEntity {
     @Column(name = "capacity")
     private Double capacity;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Person employee;
@@ -54,8 +52,4 @@ public class Delivery extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "delivery")
     private List<DeliveryVehicle> deliveryVehicles = new ArrayList<>();
-
-    @Column(name = "route_map")
-    private DirectionsRoute routeMap;
-
 }

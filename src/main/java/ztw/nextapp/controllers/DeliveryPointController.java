@@ -22,7 +22,7 @@ public class DeliveryPointController {
 
     @GetMapping("/points")
     public ResponseEntity<List<DeliveryPointDto>> getDeliveryPointDto() {
-        List<DeliveryPointDto> points = deliveryPointService.getPoints();
+        List<DeliveryPointDto> points = deliveryPointService.getAllDeliveryPoints();
         if (points.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 

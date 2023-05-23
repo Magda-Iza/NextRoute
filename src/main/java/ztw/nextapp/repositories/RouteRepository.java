@@ -18,8 +18,12 @@ public interface RouteRepository extends CrudRepository<Route, Long> {
         Optional<Route> findById(Long id);
 
         @Modifying
-        @Query(nativeQuery = true, value = "INSERT INTO routes (id) VALUES (?1)")
-        void save(Long id);
+        @Query(nativeQuery = true, value = "INSERT INTO routes (id, route_origin, route_destination) VALUES (?1, ?2, ?3)")
+        void save(Long id, String origin, String destination);
+
+        @Modifying
+        @Query(nativeQuery = true, value = "UPDATE routes SET route_origin = ?2, route_destination = ?3 WHERE id = ?1")
+        void update(Long id, String origin, String destination);
 
         @Modifying
         @Query(nativeQuery = true, value = "DELETE FROM routes WHERE id = ?1")

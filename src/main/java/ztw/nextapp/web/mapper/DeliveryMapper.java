@@ -31,6 +31,7 @@ public class DeliveryMapper {
                 .person(person)
                 .employee(employee)
                 .build();
+
         return delivery;
     }
 
@@ -43,8 +44,6 @@ public class DeliveryMapper {
         deliveryDto.setEmployee(personMapper.personToPersonDto(delivery.getEmployee()));
         deliveryDto.setPerson(personMapper.personToPersonDto(delivery.getPerson()));
         deliveryDto.setRouteId(delivery.getRoute().getId());
-        deliveryDto.setVehicleNumber(delivery.getDeliveryVehicles().size());
-        deliveryDto.setRouteMap(delivery.getRouteMap());
 
         return deliveryDto;
     }

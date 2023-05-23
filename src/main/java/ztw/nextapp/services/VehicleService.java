@@ -4,7 +4,6 @@ import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.web.model.VehicleDto;
 import java.util.List;
-import java.util.Set;
 
 public interface VehicleService {
     List<VehicleDto> findAll();

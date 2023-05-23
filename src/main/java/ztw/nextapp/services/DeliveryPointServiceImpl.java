@@ -54,6 +54,12 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
 
     @Override
     public DeliveryPoint createDeliveryPoint(DeliveryPointDto pointDto) {
+        Optional<DeliveryPoint> pointOptional = deliveryPointRepository.findByName(pointDto.getName());
+
+        if (pointOptional.isPresent()) {
+            return pointOptional.get();
+        }
+
         return deliveryPointRepository.save(deliveryPointMapper.deliveryPointDtoToDeliveryPoint(pointDto));
     }
 

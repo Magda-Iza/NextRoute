@@ -3,14 +3,16 @@ package ztw.nextapp.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ztw.nextapp.domain.Delivery;
-import ztw.nextapp.domain.Vehicle;
+import ztw.nextapp.domain.DeliveryPoint;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.services.DeliveryService;
+import ztw.nextapp.services.RouteService;
 import ztw.nextapp.web.mapper.DeliveryMapper;
 import ztw.nextapp.web.model.DeliveryDto;
+import ztw.nextapp.web.model.DeliveryPointDto;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -19,10 +21,12 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
     private final DeliveryMapper deliveryMapper;
+    private final RouteService routeService;
 
-    public DeliveryController(DeliveryService deliveryService, DeliveryMapper deliveryMapper) {
+    public DeliveryController(DeliveryService deliveryService, DeliveryMapper deliveryMapper, RouteService routeService) {
         this.deliveryService = deliveryService;
         this.deliveryMapper = deliveryMapper;
+        this.routeService = routeService;
     }
 
     @GetMapping("employee/deliveries")
@@ -113,4 +117,16 @@ public class DeliveryController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
+
+    @PostMapping("/deliveries/route/points/{id}")
+    public ResponseEntity<DeliveryPoint> createRoutePoint(@RequestBody String address, @PathVariable String id) {
+        try {
+            routeService.addRoutePoint(Long.parseLong(id), address);
+
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
+    }
+
 }

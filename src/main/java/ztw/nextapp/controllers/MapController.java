@@ -76,39 +76,8 @@ public class MapController {
         }
     }
 
-//    @GetMapping("/getDirections")
-//    public DirectionsRoute newDirections() {
-////        @RequestParam String origin, @RequestParam String destination,
-////        @RequestParam ArrayList<String> waypoints
-//        String origin = "Bezpieczna, Wrocław, Polska";
-//        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
-//        ArrayList<String> waypoints = new ArrayList<>();
-//        waypoints.add("Kościuszki, Wrocław, Polska");
-//        waypoints.add("Kleczkowska, Wrocław, Polska");
-//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
-//
-//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
-//        directionsApiRequest.origin(origin);
-//        directionsApiRequest.destination(destination);
-//        directionsApiRequest.mode(TravelMode.DRIVING);
-//        directionsApiRequest.optimizeWaypoints(true);
-//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
-//
-//        try {
-//            DirectionsResult result = directionsApiRequest.await();
-//            // kolejnosc odwiedzonych punktow
-//            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
-//            return result.routes[0];
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
     @GetMapping("/getDirections")
     public ResponseEntity<DirectionsResult> newDirections() {
-//        @RequestParam String origin, @RequestParam String destination,
-//        @RequestParam ArrayList<String> waypoints
         String origin = "Bezpieczna, Wrocław, Polska";
         String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
         ArrayList<String> waypoints = new ArrayList<>();
@@ -161,65 +130,4 @@ public class MapController {
         }
     }
 
-//    @GetMapping("/getDirections")
-//    public ResponseEntity<Path> newDirections() {
-////        @RequestParam String origin, @RequestParam String destination,
-////        @RequestParam ArrayList<String> waypoints
-//        String origin = "Bezpieczna, Wrocław, Polska";
-//        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
-//        ArrayList<String> waypoints = new ArrayList<>();
-//        waypoints.add("Kościuszki, Wrocław, Polska");
-//        waypoints.add("Kleczkowska, Wrocław, Polska");
-//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
-//
-//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
-//        directionsApiRequest.origin(origin);
-//        directionsApiRequest.destination(destination);
-//        directionsApiRequest.mode(TravelMode.DRIVING);
-//        directionsApiRequest.optimizeWaypoints(true);
-//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
-//
-//        try {
-//            DirectionsResult result = directionsApiRequest.await();
-//            // kolejnosc odwiedzonych punktow
-//            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
-//            Path path = new Path();
-//            path.setEncoded(result.routes[0].overviewPolyline.getEncodedPath());
-//            return new ResponseEntity<>(path, HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
-//    @GetMapping("/getDirections")
-//    public ResponseEntity<Path> newDirections() {
-////        @RequestParam String origin, @RequestParam String destination,
-////        @RequestParam ArrayList<String> waypoints
-//        String origin = "Bezpieczna, Wrocław, Polska";
-//        String destination = "wybrzeże Stanisława Wyspiańskiego, Wrocław, Polska";
-//        ArrayList<String> waypoints = new ArrayList<>();
-//        waypoints.add("Kościuszki, Wrocław, Polska");
-//        waypoints.add("Kleczkowska, Wrocław, Polska");
-//        waypoints.add("plac Grunwaldzki, Wrocław, Polska");
-//
-//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
-//        directionsApiRequest.origin(origin);
-//        directionsApiRequest.destination(destination);
-//        directionsApiRequest.mode(TravelMode.DRIVING);
-//        directionsApiRequest.optimizeWaypoints(true);
-//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
-//
-//        try {
-//            DirectionsResult result = directionsApiRequest.await();
-//            // kolejnosc odwiedzonych punktow
-//            // System.out.println(Arrays.toString(result.routes[0].waypointOrder));
-//            Path path = new Path();
-//            path.setEncoded(result.routes[0].overviewPolyline.decodePath());
-//            return new ResponseEntity<>(path, HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 }

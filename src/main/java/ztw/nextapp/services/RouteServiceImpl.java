@@ -79,6 +79,18 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void addRoutePoint(long routeId, String pointName) throws IllegalOperationException {
+        Optional<DeliveryPoint> pointOptional = deliveryPointRepository.findByName(pointName);
+
+        if (pointOptional.isPresent()) {
+            DeliveryPoint point = pointOptional.get();
+            routePointRepository.save(routeId, point.getId());
+        } else {
+            throw new IllegalOperationException();
+        }
+    }
+
+    @Override
     public DirectionsResult getDirectionsResult(Long routeId) {
         DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
         Optional<Route> routeOptional = routeRepository.findById(routeId);

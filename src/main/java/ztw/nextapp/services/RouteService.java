@@ -23,4 +23,6 @@ public interface RouteService extends BaseService<Route, Long> {
     void updateRoute(long id, Route route);
 
     void addRoutePoint(long routeId, Long pointId);
+
+    void addRoutePoint(long routeId, String pointName) throws IllegalOperationException;
 }

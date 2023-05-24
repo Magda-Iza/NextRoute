@@ -4,11 +4,15 @@ import com.google.maps.model.DirectionsResult;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.Delivery;
 import ztw.nextapp.domain.DeliveryVehicle;
+import ztw.nextapp.domain.Route;
+import ztw.nextapp.domain.RoutePoint;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.repositories.DeliveryRepository;
 import ztw.nextapp.web.mapper.DeliveryMapper;
+import ztw.nextapp.web.mapper.DeliveryPointMapper;
 import ztw.nextapp.web.mapper.VehicleMapper;
 import ztw.nextapp.web.model.DeliveryDto;
+import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.VehicleDto;
 
 import java.util.List;
@@ -25,14 +29,16 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final VehicleService vehicleService;
     private final DeliveryVehicleService deliveryVehicleService;
     private final VehicleMapper vehicleMapper;
+    private final DeliveryPointMapper deliveryPointMapper;
 
-    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper, RouteService routeService, VehicleService vehicleService, DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper) {
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper, RouteService routeService, VehicleService vehicleService, DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper, DeliveryPointMapper deliveryPointMapper) {
         this.deliveryRepository = deliveryRepository;
         this.deliveryMapper = deliveryMapper;
         this.routeService = routeService;
         this.vehicleService = vehicleService;
         this.deliveryVehicleService = deliveryVehicleService;
         this.vehicleMapper = vehicleMapper;
+        this.deliveryPointMapper = deliveryPointMapper;
     }
 
     @Override
@@ -143,5 +149,32 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public DirectionsResult getDirectionsResult(Long deliveryId) {
         return routeService.getDirectionsResult(deliveryId);
+    }
+
+    @Override
+    public List<DeliveryPointDto> getDeliveryRoutePoints(Long deliveryId) {
+        Optional<Delivery> delivery = deliveryRepository.findById(deliveryId);
+
+        if(delivery.isPresent()) {
+            List<RoutePoint> routePoints = routeService.getRoutePoints(delivery.get().getRoute().getId());
+
+            return routePoints.stream()
+                    .map(routePoint -> deliveryPointMapper
+                            .deliveryPointToDeliveryPointDto(routePoint.getDeliveryPoint()))
+                    .collect(Collectors.toList());
+        }
+        else
+            return null;
+    }
+
+    @Override
+    public DeliveryDto getNewDelivery() {
+        Delivery delivery = deliveryRepository.save(Delivery.builder().build());
+        System.out.println("deliveryserviceimpl samo " + delivery.getId());
+        DeliveryDto deliveryDto = new DeliveryDto();
+        deliveryDto.setId(delivery.getId());
+        System.out.println("deliveryserviceimpl po maperze" + deliveryDto.getId());
+
+        return deliveryDto;
     }
 }

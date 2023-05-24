@@ -91,6 +91,21 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void deleteRoutePoint(Long routeId, Long pointId) {
+        routePointRepository.deleteByRouteIdAndPointId(routeId, pointId);
+    }
+
+    @Override
+    public List<RoutePoint> getRoutePoints(Long routeId) {
+        return routePointRepository.findByRouteId(routeId);
+    }
+
+    @Override
+    public Route getNewRoute() {
+        return routeRepository.save(new Route());
+    }
+
+    @Override
     public DirectionsResult getDirectionsResult(Long routeId) {
         DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
         Optional<Route> routeOptional = routeRepository.findById(routeId);

@@ -4,6 +4,7 @@ import com.google.maps.model.DirectionsResult;
 import ztw.nextapp.domain.Delivery;
 import ztw.nextapp.domain.Person;
 import ztw.nextapp.web.model.DeliveryDto;
+import ztw.nextapp.web.model.DeliveryPointDto;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface DeliveryService extends BaseService<Delivery, Long> {
     DeliveryDto findDeliveryById(long id);
 
     DirectionsResult getDirectionsResult(Long deliveryId);
+
+    List<DeliveryPointDto> getDeliveryRoutePoints(Long deliveryId);
+
+    DeliveryDto getNewDelivery();
 }

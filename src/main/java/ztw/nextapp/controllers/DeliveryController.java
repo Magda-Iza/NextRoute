@@ -49,10 +49,6 @@ public class DeliveryController {
         try {
             List<DeliveryDto> deliveries = deliveryService.getDeliveries();
 
-            if (deliveries.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
             return new ResponseEntity<>(deliveries, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,7 +70,7 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("/deliveries/{id}")
+    @GetMapping("deliveries/{id}")
     public ResponseEntity<DeliveryDto> getDeliveryById(@PathVariable("id") long id) {
         DeliveryDto delivery;
 
@@ -82,7 +78,7 @@ public class DeliveryController {
             delivery = deliveryService.findDeliveryById(id);
             return new ResponseEntity<>(delivery, HttpStatus.OK);
         } catch(NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -118,7 +114,7 @@ public class DeliveryController {
         }
     }
 
-    @PostMapping("/deliveries/route/points/{id}")
+    @PostMapping("deliveries/{id}/route/points")
     public ResponseEntity<DeliveryPoint> createRoutePoint(@RequestBody String address, @PathVariable String id) {
         try {
             routeService.addRoutePoint(Long.parseLong(id), address);
@@ -129,4 +125,38 @@ public class DeliveryController {
         }
     }
 
+    @GetMapping("deliveries/new")
+    public ResponseEntity<DeliveryDto> getNewDelivery() {
+        try {
+            DeliveryDto delivery = deliveryService.getNewDelivery();
+
+            System.out.println("Delivery id: ");
+            System.out.println(delivery.getId());
+            return new ResponseEntity<>(delivery, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("deliveries/route/points/{id}")
+    public ResponseEntity<List<DeliveryPointDto>> getRoutePoints(@PathVariable String id) {
+        try {
+            List<DeliveryPointDto> deliveryPoints = deliveryService.getDeliveryRoutePoints(Long.parseLong(id));
+
+            return new ResponseEntity<>(deliveryPoints, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("deliveries/{deliveryId}/route/points/{pointId}")
+    public ResponseEntity<HttpStatus> deleteRoutePoint(@PathVariable String deliveryId, @PathVariable String pointId) {
+        try {
+            routeService.deleteRoutePoint(Long.parseLong(deliveryId), Long.parseLong(pointId));
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
 }

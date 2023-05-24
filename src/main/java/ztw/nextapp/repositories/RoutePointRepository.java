@@ -31,6 +31,10 @@ public interface RoutePointRepository extends CrudRepository<RoutePoint, Long> {
         void deleteByRouteId(Long routeId);
 
         @Modifying
+        @Query(nativeQuery = true, value = "DELETE FROM route_points WHERE route_id = ?1 AND point_id = ?2")
+        void deleteByRouteIdAndPointId(Long routeId, Long pointId);
+
+        @Modifying
         @Query(nativeQuery = true, value = "UPDATE route_points SET route_id = ?2, point_id = ?3 WHERE id = ?1")
         void update(Long id, Long routeId, Long pointId);
 

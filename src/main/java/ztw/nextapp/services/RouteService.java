@@ -5,6 +5,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import ztw.nextapp.domain.DeliveryPoint;
 import ztw.nextapp.domain.Route;
+import ztw.nextapp.domain.RoutePoint;
 import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.web.model.VehicleDto;
@@ -25,4 +26,10 @@ public interface RouteService extends BaseService<Route, Long> {
     void addRoutePoint(long routeId, Long pointId);
 
     void addRoutePoint(long routeId, String pointName) throws IllegalOperationException;
+
+    void deleteRoutePoint(Long routeId, Long pointId);
+
+    List<RoutePoint> getRoutePoints(Long routeId);
+
+    Route getNewRoute();
 }

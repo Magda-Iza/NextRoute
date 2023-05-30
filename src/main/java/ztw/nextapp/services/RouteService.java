@@ -19,7 +19,6 @@ public interface RouteService extends BaseService<Route, Long> {
     DirectionsResult getDirectionsResult(Long routeId);
 
     DirectionsResult getDirectionsResultUnsaved(String origin, String destination, List<DeliveryPointDto> points);
-    LatLng getGeocoding(String address);
 
     Set<Route> findAll();
     Route findById(Long id);

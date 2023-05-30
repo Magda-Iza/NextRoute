@@ -1,5 +1,8 @@
 package ztw.nextapp.services;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApiRequest;
+import com.google.maps.model.LatLng;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.DeliveryPoint;
 import ztw.nextapp.repositories.DeliveryPointRepository;
@@ -15,12 +18,28 @@ import java.util.stream.Collectors;
 @Service
 public class DeliveryPointServiceImpl implements DeliveryPointService {
 
-    DeliveryPointRepository deliveryPointRepository;
-    DeliveryPointMapper deliveryPointMapper;
+    private DeliveryPointRepository deliveryPointRepository;
+    private DeliveryPointMapper deliveryPointMapper;
 
-    public DeliveryPointServiceImpl(DeliveryPointRepository deliveryPointRepository, DeliveryPointMapper deliveryPointMapper) {
+    private GeoApiContext geoApiContext;
+
+    public DeliveryPointServiceImpl(DeliveryPointRepository deliveryPointRepository, DeliveryPointMapper deliveryPointMapper, GeoApiContext geoApiContext) {
         this.deliveryPointRepository = deliveryPointRepository;
         this.deliveryPointMapper = deliveryPointMapper;
+        this.geoApiContext = geoApiContext;
+    }
+
+    @Override
+    public LatLng getGeocoding(String address) {
+        GeocodingApiRequest geocodingApiRequest = new GeocodingApiRequest(geoApiContext);
+        geocodingApiRequest.address(address);
+
+        try {
+            return geocodingApiRequest.await()[0].geometry.location;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -50,7 +69,8 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
 
     @Override
     public void updateDeliveryPoint(long id, DeliveryPointDto pointDto) {
-//        deliveryPointRepository.update(id, pointDto.getName(), pointDto.getLatitude(), pointDto.getLongitude());
+        LatLng latLng = getGeocoding(pointDto.getName());
+        deliveryPointRepository.update(id, pointDto.getName(), String.valueOf(latLng.lat), String.valueOf(latLng.lng));
     }
 
     @Override
@@ -61,7 +81,14 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
             return pointOptional.get();
         }
 
-        return deliveryPointRepository.save(deliveryPointMapper.deliveryPointDtoToDeliveryPoint(pointDto));
+        LatLng latLng = getGeocoding(pointDto.getName());
+        DeliveryPoint point = DeliveryPoint.builder()
+                .name(pointDto.getName())
+                .latitude(String.valueOf(latLng.lat))
+                .longitude(String.valueOf(latLng.lng))
+                .build();
+
+        return deliveryPointRepository.save(point);
     }
 
     @Override

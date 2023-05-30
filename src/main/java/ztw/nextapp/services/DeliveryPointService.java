@@ -1,5 +1,6 @@
 package ztw.nextapp.services;
 
+import com.google.maps.model.LatLng;
 import ztw.nextapp.domain.DeliveryPoint;
 import ztw.nextapp.web.model.DeliveryPointDto;
 
@@ -15,4 +16,6 @@ public interface DeliveryPointService extends BaseService<DeliveryPoint, Long> {
     List<DeliveryPointDto> getAllDeliveryPoints();
 
     DeliveryPointDto findPointByName(String name);
+
+    LatLng getGeocoding(String address);
 }

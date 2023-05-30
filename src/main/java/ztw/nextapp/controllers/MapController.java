@@ -78,9 +78,12 @@ public class MapController {
     }
 
     @PostMapping("/directions/map")
-    public ResponseEntity<DirectionsResult> createMap(@RequestBody DeliveryDto deliveryDTO) {
+    public ResponseEntity<DirectionsResult> createMap(@RequestBody DeliveryDto delivery) {
         try {
-            DirectionsResult directionsResult = routeService.getDirectionsResultUnsaved(deliveryDTO.getOrigin(), deliveryDTO.getDestination(), deliveryDTO.getPoints());
+            System.out.println(delivery.getOrigin());
+            System.out.println(delivery.getDestination());
+            System.out.println(delivery.getPoints());
+            DirectionsResult directionsResult = routeService.getDirectionsResultUnsaved(delivery.getOrigin(), delivery.getDestination(), delivery.getPoints());
             return new ResponseEntity<>(directionsResult, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

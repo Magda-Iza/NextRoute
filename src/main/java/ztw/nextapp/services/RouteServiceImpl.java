@@ -174,18 +174,6 @@ public class RouteServiceImpl implements RouteService {
 //        }
 //    }
 
-    public LatLng getGeocoding(String address) {
-        GeocodingApiRequest geocodingApiRequest = new GeocodingApiRequest(geoApiContext);
-        geocodingApiRequest.address(address);
-
-        try {
-            return geocodingApiRequest.await()[0].geometry.location;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 //    @Override
 //    public DirectionsRoute createRoute(String capacity, String driverId, String origin, String destination, ArrayList<String> waypoints) {
 //        DirectionsRoute directionsRoute = getDirections(origin, destination, waypoints);

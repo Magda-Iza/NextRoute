@@ -8,6 +8,7 @@ import ztw.nextapp.domain.Route;
 import ztw.nextapp.domain.RoutePoint;
 import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.VehicleDto;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.Set;
 
 public interface RouteService extends BaseService<Route, Long> {
     DirectionsResult getDirectionsResult(Long routeId);
+
+    DirectionsResult getDirectionsResultUnsaved(String origin, String destination, List<DeliveryPointDto> points);
     LatLng getGeocoding(String address);
 
     Set<Route> findAll();

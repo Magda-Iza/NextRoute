@@ -15,6 +15,7 @@ import ztw.nextapp.web.model.DeliveryDto;
 import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.VehicleDto;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -57,17 +58,20 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
     }
 
+    @Transactional
     @Override
     public Delivery save(Delivery object) {
         return deliveryRepository.save(object);
     }
 
+    @Transactional
     @Override
     public void delete(Delivery object) {
         deliveryRepository.delete(object);
         deliveryVehicleService.deleteByDeliveryId(object.getId());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long aLong) throws IllegalOperationException {
         Optional<Delivery> delivery = deliveryRepository.findById(aLong);
@@ -79,9 +83,15 @@ public class DeliveryServiceImpl implements DeliveryService {
             throw new IllegalOperationException();
     }
 
+    @Transactional
     @Override
     public void updateDelivery(long id, DeliveryDto deliveryDto) {
-        deliveryRepository.update(id, deliveryDto.getDeliveryStart(), deliveryDto.getDeliveryEnd(), deliveryDto.getCapacity(), deliveryDto.getEmployee().getId(), deliveryDto.getPerson().getId(), deliveryDto.getRouteId());
+        Optional<Delivery> deliveryOptional = deliveryRepository.findById(id);
+
+        if (deliveryOptional.isPresent()) {
+            Delivery delivery = deliveryOptional.get();
+            deliveryRepository.update(id, deliveryDto.getDeliveryStart(), deliveryDto.getDeliveryEnd(), deliveryDto.getCapacity(), delivery.getEmployee().getId(), delivery.getPerson().getId(), delivery.getRoute().getId());
+        }
     }
 
     private void assignVehiclesToDelivery(Long deliveryId) {
@@ -97,14 +107,43 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
     }
 
+//    @Override
+//    public Delivery createDelivery(DeliveryDto deliveryDto) {
+//        Delivery delivery = deliveryMapper.deliveryDtoToDelivery(deliveryDto);
+//        Delivery savedDelivery = deliveryRepository.save(delivery);
+//        assignVehiclesToDelivery(savedDelivery.getId());
+//
+//        return savedDelivery;
+//    }
+
+    @Transactional
     @Override
-    public Delivery createDelivery(DeliveryDto deliveryDto) {
-        Delivery delivery = deliveryMapper.deliveryDtoToDelivery(deliveryDto);
+    public Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException {
+        System.out.println("weszlo");
+        Route route = new Route();
+        route.setOrigin(deliveryDto.getOrigin());
+        route.setDestination(deliveryDto.getDestination());
+
+        for (DeliveryPointDto pointDto : deliveryDto.getPoints()) {
+            routeService.addRoutePoint(route.getId(), pointDto.getName());
+        }
+
+        Delivery delivery = Delivery.builder()
+                .deliveryStart(deliveryDto.getDeliveryStart())
+                .deliveryEnd(deliveryDto.getDeliveryEnd())
+                .capacity(deliveryDto.getCapacity())
+                .employee(null)
+                .person(null)
+                .route(route)
+                .build();
+
+        System.out.println("wyszlo");
         Delivery savedDelivery = deliveryRepository.save(delivery);
         assignVehiclesToDelivery(savedDelivery.getId());
 
         return savedDelivery;
     }
+
 
     @Override
     public List<DeliveryDto> getDeliveries() {

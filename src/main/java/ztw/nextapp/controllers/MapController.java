@@ -7,13 +7,14 @@ import com.google.maps.GeocodingApiRequest;
 import com.google.maps.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ztw.nextapp.domain.Delivery;
 import ztw.nextapp.domain.Route;
+import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.services.DeliveryService;
 import ztw.nextapp.services.RouteService;
+import ztw.nextapp.web.model.DeliveryDto;
+import ztw.nextapp.web.model.VehicleDto;
 
 import java.util.ArrayList;
 
@@ -73,6 +74,16 @@ public class MapController {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @PostMapping("/directions/map")
+    public ResponseEntity<DirectionsResult> createMap(@RequestBody DeliveryDto deliveryDTO) {
+        try {
+            DirectionsResult directionsResult = routeService.getDirectionsResultUnsaved(deliveryDTO.getOrigin(), deliveryDTO.getDestination(), deliveryDTO.getPoints());
+            return new ResponseEntity<>(directionsResult, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

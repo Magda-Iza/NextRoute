@@ -13,6 +13,7 @@ import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.repositories.RoutePointRepository;
 import ztw.nextapp.repositories.RouteRepository;
+import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.VehicleDto;
 
 import java.util.ArrayList;
@@ -132,6 +133,25 @@ public class RouteServiceImpl implements RouteService {
                 return null;
             }
         } else {
+            return null;
+        }
+    }
+
+    @Override
+    public DirectionsResult getDirectionsResultUnsaved(String origin, String destination, List<DeliveryPointDto> points) {
+        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);;
+
+        directionsApiRequest.origin(origin);
+        directionsApiRequest.destination(destination);
+        directionsApiRequest.mode(TravelMode.DRIVING);
+        directionsApiRequest.optimizeWaypoints(true);
+        directionsApiRequest.waypoints(points.stream().map(DeliveryPointDto::getName).toArray(String[]::new));
+
+        try {
+            DirectionsResult result = directionsApiRequest.await();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

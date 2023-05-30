@@ -49,7 +49,7 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
 
     @Override
     public void updateDeliveryPoint(long id, DeliveryPointDto pointDto) {
-        deliveryPointRepository.update(id, pointDto.getName(), pointDto.getLatitude(), pointDto.getLongitude());
+//        deliveryPointRepository.update(id, pointDto.getName(), pointDto.getLatitude(), pointDto.getLongitude());
     }
 
     @Override

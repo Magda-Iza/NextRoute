@@ -10,6 +10,4 @@ import lombok.Setter;
 public class DeliveryPointDto {
     private Long id;
     private String name;
-    private String latitude;
-    private String longitude;
 }

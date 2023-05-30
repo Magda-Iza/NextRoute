@@ -7,6 +7,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//public class DeliveryDto {
+//        private Long id;
+//        private LocalDate deliveryStart;
+//        private LocalDate deliveryEnd;
+//        private Double capacity;
+//        private PersonDto employee;
+//        private PersonDto person;
+//        private Long routeId;
+//}
+
 
 @Getter
 @Setter
@@ -16,7 +31,8 @@ public class DeliveryDto {
         private LocalDate deliveryStart;
         private LocalDate deliveryEnd;
         private Double capacity;
-        private PersonDto employee;
-        private PersonDto person;
-        private Long routeId;
+        private String origin;
+        private String destination;
+        private List<DeliveryPointDto> points;
 }
+

@@ -8,6 +8,7 @@ import ztw.nextapp.domain.Route;
 import ztw.nextapp.domain.RoutePoint;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.repositories.DeliveryRepository;
+import ztw.nextapp.repositories.RouteRepository;
 import ztw.nextapp.web.mapper.DeliveryMapper;
 import ztw.nextapp.web.mapper.DeliveryPointMapper;
 import ztw.nextapp.web.mapper.VehicleMapper;
@@ -31,8 +32,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryVehicleService deliveryVehicleService;
     private final VehicleMapper vehicleMapper;
     private final DeliveryPointMapper deliveryPointMapper;
+    private final RouteRepository routeRepository;
 
-    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper, RouteService routeService, VehicleService vehicleService, DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper, DeliveryPointMapper deliveryPointMapper) {
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper, RouteService routeService, VehicleService vehicleService, DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper, DeliveryPointMapper deliveryPointMapper,
+                               RouteRepository routeRepository) {
         this.deliveryRepository = deliveryRepository;
         this.deliveryMapper = deliveryMapper;
         this.routeService = routeService;
@@ -40,6 +43,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.deliveryVehicleService = deliveryVehicleService;
         this.vehicleMapper = vehicleMapper;
         this.deliveryPointMapper = deliveryPointMapper;
+        this.routeRepository = routeRepository;
     }
 
     @Override
@@ -121,8 +125,14 @@ public class DeliveryServiceImpl implements DeliveryService {
     public Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException {
         System.out.println("weszlo");
         Route route = new Route();
+        System.out.println(deliveryDto.getOrigin());
+        System.out.println(deliveryDto.getDestination());
+        System.out.println(deliveryDto.getPoints());
+        System.out.println(deliveryDto.getCapacity());
+
         route.setOrigin(deliveryDto.getOrigin());
         route.setDestination(deliveryDto.getDestination());
+        route = routeRepository.save(route);
 
         for (DeliveryPointDto pointDto : deliveryDto.getPoints()) {
             routeService.addRoutePoint(route.getId(), pointDto.getName());

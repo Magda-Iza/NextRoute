@@ -6,6 +6,7 @@ import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.web.mapper.DeliveryPointMapper;
 import ztw.nextapp.web.model.DeliveryPointDto;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
 
     @Override
     public Set<DeliveryPoint> findAll() {
-        return deliveryPointRepository.findAll().stream().collect(Collectors.toSet());
+        return new HashSet<>(deliveryPointRepository.findAll());
     }
 
     @Override

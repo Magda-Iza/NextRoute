@@ -83,10 +83,14 @@ public class DeliveryController {
     }
 
     @PostMapping("deliveries")
-    public ResponseEntity<Delivery> saveDelivery(DeliveryDto deliveryDto) {
+    public ResponseEntity<Delivery> saveDelivery(@RequestBody DeliveryDto delivery) {
+//        Delivery deliveryResult = deliveryService.createDelivery(delivery);
+//        return new ResponseEntity<>(deliveryResult, HttpStatus.CREATED);
         try {
-            Delivery delivery = deliveryService.createDelivery(deliveryDto);
-            return new ResponseEntity<>(delivery, HttpStatus.CREATED);
+            Delivery deliveryResult = deliveryService.createDelivery(delivery);
+            return new ResponseEntity<>(deliveryResult, HttpStatus.CREATED);
+        } catch (IllegalOperationException e) {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

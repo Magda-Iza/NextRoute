@@ -3,7 +3,7 @@ package ztw.nextapp.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Not enough vehicles")
 public class NotEnoughVehiclesException extends RuntimeException {
     public NotEnoughVehiclesException() {
         super();

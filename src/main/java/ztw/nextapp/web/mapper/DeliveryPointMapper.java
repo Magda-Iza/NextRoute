@@ -11,6 +11,8 @@ public class DeliveryPointMapper {
         DeliveryPointDto deliveryPointDto = new DeliveryPointDto();
         deliveryPointDto.setId(deliveryPoint.getId());
         deliveryPointDto.setName(deliveryPoint.getName());
+        deliveryPointDto.setLatitude(deliveryPoint.getLatitude());
+        deliveryPointDto.setLongitude(deliveryPoint.getLongitude());
 
         return deliveryPointDto;
     }
@@ -19,6 +21,8 @@ public class DeliveryPointMapper {
         DeliveryPoint deliveryPoint = new DeliveryPoint();
         deliveryPoint.setId(deliveryPointDto.getId());
         deliveryPoint.setName(deliveryPointDto.getName());
+        deliveryPoint.setLatitude(deliveryPointDto.getLatitude());
+        deliveryPoint.setLongitude(deliveryPointDto.getLongitude());
 
         return deliveryPoint;
     }

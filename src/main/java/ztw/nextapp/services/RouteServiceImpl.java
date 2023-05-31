@@ -6,9 +6,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApiRequest;
 import com.google.maps.model.*;
 import org.springframework.stereotype.Service;
-import ztw.nextapp.domain.DeliveryPoint;
-import ztw.nextapp.domain.Route;
-import ztw.nextapp.domain.RoutePoint;
+import ztw.nextapp.domain.*;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.repositories.RoutePointRepository;
@@ -16,10 +14,12 @@ import ztw.nextapp.repositories.RouteRepository;
 import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.VehicleDto;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +28,7 @@ public class RouteServiceImpl implements RouteService {
     private RouteRepository routeRepository;
     private RoutePointRepository routePointRepository;
     private DeliveryPointRepository deliveryPointRepository;
+
 
     public RouteServiceImpl(GeoApiContext geoApiContext, RouteRepository routeRepository, RoutePointRepository routePointRepository, DeliveryPointRepository deliveryPointRepository) {
         this.geoApiContext = geoApiContext;
@@ -79,12 +80,28 @@ public class RouteServiceImpl implements RouteService {
         routePointRepository.save(routeId, pointId);
     }
 
+    private String removeSpecialCharacters(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String result = pattern.matcher(normalized).replaceAll("");
+        return result.replaceAll("ł", "l");
+    }
+
     @Override
     public void addRoutePoint(long routeId, String pointName) throws IllegalOperationException {
         Optional<DeliveryPoint> pointOptional = deliveryPointRepository.findByName(pointName);
+        Optional<DeliveryPoint> pointOptionalWithoutChars = deliveryPointRepository
+                .findByName(removeSpecialCharacters(pointName));
 
         if (pointOptional.isPresent()) {
             DeliveryPoint point = pointOptional.get();
+            System.out.println("znamy punkt");
+            System.out.println("id punktu: " + point.getId() + " nazwa " + point.getName());
+            routePointRepository.save(routeId, point.getId());
+        } else if (pointOptionalWithoutChars.isPresent()){
+            DeliveryPoint point = pointOptionalWithoutChars.get();
+            System.out.println("znamy punkt");
+            System.out.println("id punktu: " + point.getId() + " nazwa " + point.getName());
             routePointRepository.save(routeId, point.getId());
         } else {
             throw new IllegalOperationException();

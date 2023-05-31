@@ -112,8 +112,6 @@ public class DeliveryController {
 
     @PostMapping("deliveries")
     public ResponseEntity<Delivery> saveDelivery(@RequestBody DeliveryDto delivery) {
-//        Delivery deliveryResult = deliveryService.createDelivery(delivery);
-//        return new ResponseEntity<>(deliveryResult, HttpStatus.CREATED);
         try {
             Delivery deliveryResult = deliveryService.createDelivery(delivery);
             return new ResponseEntity<>(deliveryResult, HttpStatus.CREATED);

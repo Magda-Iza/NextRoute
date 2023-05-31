@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Illegal operation")
-public class IllegalOperationException extends RuntimeException {
+public class IllegalOperationException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

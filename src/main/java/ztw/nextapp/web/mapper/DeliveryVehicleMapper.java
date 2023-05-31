@@ -17,7 +17,7 @@ public class DeliveryVehicleMapper {
         Person driver = deliveryVehicle.getPerson();
         deliveryVehicleDto.setId(vehicle.getId());
         deliveryVehicleDto.setVehicle(vehicle.getVin());
-        deliveryVehicleDto.setDriver(driver.getName());
+        //deliveryVehicleDto.setDriver(driver.getName());
 
         return deliveryVehicleDto;
     }

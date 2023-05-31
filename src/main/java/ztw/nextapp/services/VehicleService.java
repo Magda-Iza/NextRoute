@@ -2,6 +2,7 @@ package ztw.nextapp.services;
 
 import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.web.model.DeliveryVehicleDto;
 import ztw.nextapp.web.model.VehicleDto;
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface VehicleService {
     void updateVehicle(long id, VehicleDto vehicleDto);
 
     List<VehicleDto> findVehiclesByDeliveryId(Long id);
+
+    List<DeliveryVehicleDto>  findVehiclesInDelivery(Long id);
 }

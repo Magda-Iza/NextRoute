@@ -51,6 +51,7 @@ public class VehicleController {
         return new ResponseEntity<>(vehicles, HttpStatus.OK);
     }
 
+
     @PostMapping("/vehicles")
     public ResponseEntity<Vehicle> createVehicle(@RequestBody VehicleDto vehicleDTO) {
         try {

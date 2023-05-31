@@ -1,11 +1,15 @@
 package ztw.nextapp.services;
 
 import org.springframework.stereotype.Service;
+import ztw.nextapp.domain.DeliveryVehicle;
 import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.exceptions.NotEnoughVehiclesException;
+import ztw.nextapp.repositories.DeliveryVehicleRepository;
 import ztw.nextapp.repositories.VehicleRepository;
+import ztw.nextapp.web.mapper.DeliveryVehicleMapper;
 import ztw.nextapp.web.mapper.VehicleMapper;
+import ztw.nextapp.web.model.DeliveryVehicleDto;
 import ztw.nextapp.web.model.VehicleDto;
 
 import java.util.*;
@@ -15,10 +19,14 @@ import java.util.stream.*;
 public class VehicleServiceImpl implements VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
+    private final DeliveryVehicleRepository deliveryVehicleRepository;
+    private final DeliveryVehicleMapper deliveryVehicleMapper;
 
-    public VehicleServiceImpl(VehicleRepository vehicleRepository, VehicleMapper vehicleMapper) {
+    public VehicleServiceImpl(VehicleRepository vehicleRepository, VehicleMapper vehicleMapper, DeliveryVehicleRepository deliveryVehicleRepository, DeliveryVehicleMapper deliveryVehicleMapper) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleMapper = vehicleMapper;
+        this.deliveryVehicleRepository = deliveryVehicleRepository;
+        this.deliveryVehicleMapper = deliveryVehicleMapper;
     }
 
     @Override
@@ -82,6 +90,14 @@ public class VehicleServiceImpl implements VehicleService {
     public List<VehicleDto> findVehiclesByDeliveryId(Long id) {
         //TODO
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<DeliveryVehicleDto> findVehiclesInDelivery(Long id) {
+        return deliveryVehicleRepository.findByDeliveryId(id)
+                .stream()
+                .map(deliveryVehicleMapper::deliveryVehicleToDeliveryVehicleDto)
+                .collect(Collectors.toList());
     }
 
     @Override

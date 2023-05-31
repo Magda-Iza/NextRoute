@@ -9,9 +9,11 @@ import ztw.nextapp.domain.DeliveryPoint;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.services.DeliveryService;
 import ztw.nextapp.services.RouteService;
+import ztw.nextapp.services.VehicleService;
 import ztw.nextapp.web.mapper.DeliveryMapper;
 import ztw.nextapp.web.model.DeliveryDto;
 import ztw.nextapp.web.model.DeliveryPointDto;
+import ztw.nextapp.web.model.DeliveryVehicleDto;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,11 +24,13 @@ public class DeliveryController {
     private final DeliveryService deliveryService;
     private final DeliveryMapper deliveryMapper;
     private final RouteService routeService;
+    private final VehicleService vehicleService;
 
-    public DeliveryController(DeliveryService deliveryService, DeliveryMapper deliveryMapper, RouteService routeService) {
+    public DeliveryController(DeliveryService deliveryService, DeliveryMapper deliveryMapper, RouteService routeService, VehicleService vehicleService) {
         this.deliveryService = deliveryService;
         this.deliveryMapper = deliveryMapper;
         this.routeService = routeService;
+        this.vehicleService = vehicleService;
     }
 
     @GetMapping("employee/deliveries")
@@ -140,6 +144,11 @@ public class DeliveryController {
         } catch (IllegalOperationException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping("transport/{id}")
+    public ResponseEntity<List<DeliveryVehicleDto>> getDeliveryVehicles(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(vehicleService.findVehiclesInDelivery(id), HttpStatus.OK);
     }
 
     @PostMapping("deliveries/{id}/route/points")

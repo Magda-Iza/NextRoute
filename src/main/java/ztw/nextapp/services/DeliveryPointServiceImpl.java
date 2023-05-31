@@ -2,6 +2,7 @@ package ztw.nextapp.services;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApiRequest;
+import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.DeliveryPoint;
@@ -35,7 +36,9 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
         geocodingApiRequest.address(address);
 
         try {
-            return geocodingApiRequest.await()[0].geometry.location;
+            GeocodingResult[] geocodingResults = geocodingApiRequest.await();
+            System.out.println(geocodingResults[0].geometry.location);
+            return geocodingResults[0].geometry.location;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

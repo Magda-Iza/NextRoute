@@ -70,8 +70,32 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("deliveries/{id}")
+    @GetMapping("admin/delivery/{id}")
     public ResponseEntity<DeliveryDto> getDeliveryById(@PathVariable("id") long id) {
+        DeliveryDto delivery;
+
+        try {
+            delivery = deliveryService.findDeliveryById(id);
+            return new ResponseEntity<>(delivery, HttpStatus.OK);
+        } catch(NoSuchElementException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("employee/delivery/{id}")
+    public ResponseEntity<DeliveryDto> getDeliveryEmployeeById(@PathVariable("id") long id) {
+        DeliveryDto delivery;
+
+        try {
+            delivery = deliveryService.findDeliveryById(id);
+            return new ResponseEntity<>(delivery, HttpStatus.OK);
+        } catch(NoSuchElementException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("driver/delivery/{id}")
+    public ResponseEntity<DeliveryDto> getDeliveryDriverById(@PathVariable("id") long id) {
         DeliveryDto delivery;
 
         try {

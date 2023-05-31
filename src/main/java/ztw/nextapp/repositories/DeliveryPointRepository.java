@@ -30,7 +30,7 @@ public interface DeliveryPointRepository extends CrudRepository<DeliveryPoint, L
     @Query(nativeQuery = true, value = "UPDATE delivery_points SET name = ?2, latitude = ?3, longitude = ?4 WHERE id = ?1")
     void update(Long id, String name, String latitude, String longitude);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM delivery_points WHERE name = ?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM delivery_points WHERE LOWER(name) LIKE LOWER(?1)")
     Optional<DeliveryPoint> findByName(String name);
 
 }

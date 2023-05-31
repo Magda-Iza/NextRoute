@@ -10,10 +10,12 @@ import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.web.mapper.DeliveryPointMapper;
 import ztw.nextapp.web.model.DeliveryPointDto;
 
+import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,12 +78,42 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
         deliveryPointRepository.update(id, pointDto.getName(), String.valueOf(latLng.lat), String.valueOf(latLng.lng));
     }
 
+//    @Override
+//    public DeliveryPoint createDeliveryPoint(DeliveryPointDto pointDto) {
+//        Optional<DeliveryPoint> pointOptional = deliveryPointRepository.findByName(pointDto.getName());
+//
+//        if (pointOptional.isPresent()) {
+//            return pointOptional.get();
+//        }
+//
+//        LatLng latLng = getGeocoding(pointDto.getName());
+//        DeliveryPoint point = DeliveryPoint.builder()
+//                .name(pointDto.getName())
+//                .latitude(String.valueOf(latLng.lat))
+//                .longitude(String.valueOf(latLng.lng))
+//                .build();
+//
+//        return deliveryPointRepository.save(point);
+//    }
+
+    private String removeSpecialCharacters(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String result = pattern.matcher(normalized).replaceAll("");
+        return result.replaceAll("ł", "l");
+    }
     @Override
     public DeliveryPoint createDeliveryPoint(DeliveryPointDto pointDto) {
         Optional<DeliveryPoint> pointOptional = deliveryPointRepository.findByName(pointDto.getName());
+        Optional<DeliveryPoint> pointOptionalWithoutChars = deliveryPointRepository
+                .findByName(removeSpecialCharacters(pointDto.getName()));
 
-        if (pointOptional.isPresent()) {
-            return pointOptional.get();
+        System.out.println("normalna nazwa: " + pointDto.getName());
+        System.out.println("bez znakow: " + removeSpecialCharacters(pointDto.getName()));
+
+        if (pointOptional.isPresent() || pointOptionalWithoutChars.isPresent()) {
+            System.out.println("Point already exists");
+            return null;
         }
 
         LatLng latLng = getGeocoding(pointDto.getName());

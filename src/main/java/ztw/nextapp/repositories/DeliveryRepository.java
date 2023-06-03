@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ztw.nextapp.domain.Delivery;
+import ztw.nextapp.domain.Person;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,5 +43,6 @@ public interface DeliveryRepository extends CrudRepository<Delivery, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM deliveries WHERE route_id = ?1 AND driver_id = ?2")
     Optional<Delivery> findByRouteIdDriverId(Long route_id, Long driver_id);
+
 
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "employees")
-public class Person extends BaseEntity {
-
-//    @Builder
-//    public Person(Long id, String name, String telephone, ApplicationUserRole userRole) {
-//        super(id);
-//        this.name = name;
-//        this.telephone = telephone;
-//        this.userRole = userRole;
-//    }
+public class Person extends BaseEntity implements Serializable {
 
 
     @Builder
@@ -55,19 +48,5 @@ public class Person extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<Delivery> drivers = new ArrayList<>();
 
-    public boolean isAccountNonExpired() {
-        return true;
-    }
 
-    public boolean isAccountNonLocked() {
-        return !isLocked();
-    }
-
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    public boolean isEnabled() {
-        return true;
-    }
 }

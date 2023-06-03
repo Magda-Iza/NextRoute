@@ -24,6 +24,7 @@ public class DeliveryMapper {
                 .deliveryStart(deliveryDto.getDeliveryStart())
                 .deliveryEnd(deliveryDto.getDeliveryEnd())
                 .capacity(deliveryDto.getCapacity())
+                .employee(deliveryDto.getEmployee())
                 .build();
 
         return delivery;
@@ -35,6 +36,7 @@ public class DeliveryMapper {
         deliveryDto.setDeliveryStart(delivery.getDeliveryStart());
         deliveryDto.setDeliveryEnd(delivery.getDeliveryEnd());
         deliveryDto.setCapacity(delivery.getCapacity());
+        deliveryDto.setEmployee(delivery.getEmployee());
 
         return deliveryDto;
     }

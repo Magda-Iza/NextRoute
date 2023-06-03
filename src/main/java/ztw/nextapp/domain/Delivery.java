@@ -1,11 +1,13 @@
 package ztw.nextapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "deliveries")
-public class Delivery extends BaseEntity {
+public class Delivery extends BaseEntity implements Serializable {
 
     @Builder
     public Delivery(Long id, LocalDate deliveryStart, LocalDate deliveryEnd, Double capacity, Person employee, Person person, Route route, List<DeliveryVehicle> deliveryVehicles) {
@@ -38,7 +40,8 @@ public class Delivery extends BaseEntity {
     @Column(name = "capacity")
     private Double capacity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Person employee;
 

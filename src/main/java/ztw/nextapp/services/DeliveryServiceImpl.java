@@ -6,6 +6,7 @@ import ztw.nextapp.domain.*;
 import ztw.nextapp.exceptions.IllegalOperationException;
 import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.repositories.DeliveryRepository;
+import ztw.nextapp.repositories.PersonRepository;
 import ztw.nextapp.repositories.RouteRepository;
 import ztw.nextapp.web.mapper.DeliveryMapper;
 import ztw.nextapp.web.mapper.DeliveryPointMapper;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -34,12 +36,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryPointMapper deliveryPointMapper;
     private final RouteRepository routeRepository;
     private final DeliveryPointRepository deliveryPointRepository;
+    private final PersonRepository employeeRepository;
 
     public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper,
                                RouteService routeService, VehicleService vehicleService,
                                DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper,
                                DeliveryPointMapper deliveryPointMapper, RouteRepository routeRepository,
-                               DeliveryPointRepository deliveryPointRepository) {
+                               DeliveryPointRepository deliveryPointRepository, PersonRepository employeeRepository) {
         this.deliveryRepository = deliveryRepository;
         this.deliveryMapper = deliveryMapper;
         this.routeService = routeService;
@@ -49,6 +52,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.deliveryPointMapper = deliveryPointMapper;
         this.routeRepository = routeRepository;
         this.deliveryPointRepository = deliveryPointRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -187,6 +191,13 @@ public class DeliveryServiceImpl implements DeliveryService {
         assignVehiclesToDelivery(savedDelivery.getId());
 
         return savedDelivery;
+    }
+
+    private Person findEmployee() {
+        List<Person> employees = employeeRepository.findEmployees();
+        Random random = new Random();
+        int p = random.nextInt(0) + employees.size();
+        return employees.get(p);
     }
 
 

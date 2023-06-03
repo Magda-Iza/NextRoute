@@ -212,8 +212,8 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public List<DeliveryDto> getDriverDeliveries(Long i) {
-        List<Delivery> deliveries = deliveryRepository.findByDriverId(i);
+    public List<DeliveryDto> getDriverDeliveries(String name) {
+        List<Delivery> deliveries = deliveryRepository.findByDriverName(name);
 
         return deliveries.stream()
                 .map(deliveryMapper::deliveryToDeliveryDto)

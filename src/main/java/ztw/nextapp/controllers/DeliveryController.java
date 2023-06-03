@@ -64,7 +64,7 @@ public class DeliveryController {
     public ResponseEntity<List<DeliveryDto>> getDriverDeliveries(@PathVariable("name") String name) {
         System.out.print(name);
         try {
-            List<DeliveryDto> deliveries = deliveryService.getDriverDeliveries(1L);
+            List<DeliveryDto> deliveries = deliveryService.getDriverDeliveries(name);
 
             if (deliveries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -101,10 +101,10 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping(value="driver/delivery/{id}/user/{name}")
-    public ResponseEntity<DeliveryDto> getDeliveryDriverById(@PathVariable("id") long id, @PathVariable("name") String name) {
+    @GetMapping(value="driver/delivery/{id}")
+    public ResponseEntity<DeliveryDto> getDeliveryDriverById(@PathVariable("id") long id) {
         DeliveryDto delivery;
-        System.out.print(name);
+        //System.out.print(name);
         try {
             delivery = deliveryService.findDeliveryById(id);
             return new ResponseEntity<>(delivery, HttpStatus.OK);

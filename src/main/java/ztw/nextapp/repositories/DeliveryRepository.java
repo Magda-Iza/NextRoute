@@ -44,5 +44,6 @@ public interface DeliveryRepository extends CrudRepository<Delivery, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM deliveries WHERE route_id = ?1 AND driver_id = ?2")
     Optional<Delivery> findByRouteIdDriverId(Long route_id, Long driver_id);
 
-
+    @Query(nativeQuery = true, value = "SELECT * FROM deliveries INNER JOIN employees ON employees.id = deliveries.driver_id WHERE employees.email LIKE '%' + ?1 + '%'")
+    List<Delivery> findByDriverName(String name);
 }

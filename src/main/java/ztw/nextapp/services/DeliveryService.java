@@ -18,7 +18,7 @@ public interface DeliveryService extends BaseService<Delivery, Long> {
 
     List<DeliveryDto> getDeliveries();
 
-    List<DeliveryDto> getDriverDeliveries(Long i);
+    List<DeliveryDto> getDriverDeliveries(String name);
 
     DeliveryDto getDeliverByRouteIdDriverId(Long routeId, Long driverId);
 

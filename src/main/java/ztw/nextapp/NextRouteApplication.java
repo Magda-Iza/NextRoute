@@ -16,11 +16,6 @@ public class NextRouteApplication {
 		return "Hey there! Your email address is: ";
 	}
 
-	@GetMapping("/login")
-	public String log(Principal principal) {
-		return "Logowanie";
-	}
-
 	@GetMapping("/cos")
 	public String cos(Principal principal) {
 		return "C";

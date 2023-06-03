@@ -15,10 +15,13 @@ import ztw.nextapp.web.model.DeliveryDto;
 import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.DeliveryVehicleDto;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
+//@CrossOrigin(origins = "https://dev-88760044-admin.okta.com/")
+//@CrossOrigin(origins = "http://localhost:5173/")
 public class DeliveryController {
 
     private final DeliveryService deliveryService;
@@ -59,7 +62,7 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("driver/deliveries")
+    @GetMapping(value="driver/deliveries", produces="application/json")
     public ResponseEntity<List<DeliveryDto>> getDriverDeliveries() {
         try {
             List<DeliveryDto> deliveries = deliveryService.getDriverDeliveries(1L);
@@ -74,7 +77,8 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("admin/delivery/{id}")
+
+    @GetMapping(value="admin/delivery/{id}")
     public ResponseEntity<DeliveryDto> getDeliveryById(@PathVariable("id") long id) {
         DeliveryDto delivery;
 
@@ -98,9 +102,10 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("driver/delivery/{id}")
+    @GetMapping(value="driver/delivery/{id}")
     public ResponseEntity<DeliveryDto> getDeliveryDriverById(@PathVariable("id") long id) {
         DeliveryDto delivery;
+        //System.out.print("Principal " + principal);
 
         try {
             delivery = deliveryService.findDeliveryById(id);

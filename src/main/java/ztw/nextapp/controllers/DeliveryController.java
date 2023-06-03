@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
-//@CrossOrigin(origins = "https://dev-88760044-admin.okta.com/")
-//@CrossOrigin(origins = "http://localhost:5173/")
 public class DeliveryController {
 
     private final DeliveryService deliveryService;
@@ -62,8 +60,9 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping(value="driver/deliveries", produces="application/json")
-    public ResponseEntity<List<DeliveryDto>> getDriverDeliveries() {
+    @GetMapping(value="driver/deliveries/{name}")
+    public ResponseEntity<List<DeliveryDto>> getDriverDeliveries(@PathVariable("name") String name) {
+        System.out.print(name);
         try {
             List<DeliveryDto> deliveries = deliveryService.getDriverDeliveries(1L);
 
@@ -102,11 +101,10 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping(value="driver/delivery/{id}")
-    public ResponseEntity<DeliveryDto> getDeliveryDriverById(@PathVariable("id") long id) {
+    @GetMapping(value="driver/delivery/{id}/user/{name}")
+    public ResponseEntity<DeliveryDto> getDeliveryDriverById(@PathVariable("id") long id, @PathVariable("name") String name) {
         DeliveryDto delivery;
-        //System.out.print("Principal " + principal);
-
+        System.out.print(name);
         try {
             delivery = deliveryService.findDeliveryById(id);
             return new ResponseEntity<>(delivery, HttpStatus.OK);

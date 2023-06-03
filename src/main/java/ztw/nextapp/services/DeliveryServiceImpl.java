@@ -2,11 +2,9 @@ package ztw.nextapp.services;
 
 import com.google.maps.model.DirectionsResult;
 import org.springframework.stereotype.Service;
-import ztw.nextapp.domain.Delivery;
-import ztw.nextapp.domain.DeliveryVehicle;
-import ztw.nextapp.domain.Route;
-import ztw.nextapp.domain.RoutePoint;
+import ztw.nextapp.domain.*;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.repositories.DeliveryRepository;
 import ztw.nextapp.repositories.RouteRepository;
 import ztw.nextapp.web.mapper.DeliveryMapper;
@@ -17,9 +15,11 @@ import ztw.nextapp.web.model.DeliveryPointDto;
 import ztw.nextapp.web.model.VehicleDto;
 
 import javax.transaction.Transactional;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,9 +33,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final VehicleMapper vehicleMapper;
     private final DeliveryPointMapper deliveryPointMapper;
     private final RouteRepository routeRepository;
+    private final DeliveryPointRepository deliveryPointRepository;
 
-    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper, RouteService routeService, VehicleService vehicleService, DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper, DeliveryPointMapper deliveryPointMapper,
-                               RouteRepository routeRepository) {
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper,
+                               RouteService routeService, VehicleService vehicleService,
+                               DeliveryVehicleService deliveryVehicleService, VehicleMapper vehicleMapper,
+                               DeliveryPointMapper deliveryPointMapper, RouteRepository routeRepository,
+                               DeliveryPointRepository deliveryPointRepository) {
         this.deliveryRepository = deliveryRepository;
         this.deliveryMapper = deliveryMapper;
         this.routeService = routeService;
@@ -44,6 +48,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.vehicleMapper = vehicleMapper;
         this.deliveryPointMapper = deliveryPointMapper;
         this.routeRepository = routeRepository;
+        this.deliveryPointRepository = deliveryPointRepository;
     }
 
     @Override
@@ -120,10 +125,40 @@ public class DeliveryServiceImpl implements DeliveryService {
 //        return savedDelivery;
 //    }
 
+    private String removeSpecialCharacters(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String result = pattern.matcher(normalized).replaceAll("");
+        return result.replaceAll("ł", "l");
+    }
+
+    private boolean validatePoint(String address) {
+        Optional<DeliveryPoint> pointOptional = deliveryPointRepository.findByName(address);
+        Optional<DeliveryPoint> pointOptionalWithoutChars = deliveryPointRepository
+                .findByName(removeSpecialCharacters(address));
+
+        if (!pointOptional.isPresent() && !pointOptionalWithoutChars.isPresent()) {
+            return false;
+        }
+
+        return true;
+    }
+
     @Transactional
     @Override
     public Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException {
         System.out.println("weszlo");
+
+        if (!validatePoint(deliveryDto.getOrigin()) || !validatePoint(deliveryDto.getDestination())) {
+            throw new IllegalOperationException();
+        }
+
+        for (DeliveryPointDto pointDto : deliveryDto.getPoints()) {
+            if (!validatePoint(pointDto.getName())) {
+                throw new IllegalOperationException();
+            }
+        }
+
         Route route = new Route();
         System.out.println(deliveryDto.getOrigin());
         System.out.println(deliveryDto.getDestination());

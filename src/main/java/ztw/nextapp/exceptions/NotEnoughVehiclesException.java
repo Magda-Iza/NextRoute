@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Not enough vehicles")
-public class NotEnoughVehiclesException extends RuntimeException {
+public class NotEnoughVehiclesException extends Exception {
     public NotEnoughVehiclesException() {
         super();
     }

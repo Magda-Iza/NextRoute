@@ -4,6 +4,7 @@ import com.google.maps.model.DirectionsResult;
 import ztw.nextapp.domain.Delivery;
 import ztw.nextapp.domain.Person;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.web.model.DeliveryDto;
 import ztw.nextapp.web.model.DeliveryPointDto;
 
@@ -14,7 +15,7 @@ public interface DeliveryService extends BaseService<Delivery, Long> {
 
     void updateDelivery(long id, DeliveryDto deliveryDto);
 
-    Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException;
+    Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException, NotEnoughVehiclesException;
 
     List<DeliveryDto> getDeliveries();
 

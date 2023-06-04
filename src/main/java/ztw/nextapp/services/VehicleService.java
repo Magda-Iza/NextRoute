@@ -2,6 +2,7 @@ package ztw.nextapp.services;
 
 import ztw.nextapp.domain.Vehicle;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.web.model.DeliveryVehicleDto;
 import ztw.nextapp.web.model.VehicleDto;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface VehicleService {
     void delete(Long id);
 
     void deleteById(Long id) throws IllegalOperationException;
-    public List<VehicleDto> findVehiclesForRoute(Double capacity);
+    public List<VehicleDto> findVehiclesForRoute(Double capacity) throws NotEnoughVehiclesException;
 
     Vehicle createVehicle(VehicleDto vehicleDTO);
 

@@ -14,8 +14,7 @@ import ztw.nextapp.web.model.VehicleDto;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class VehicleServiceTest {
@@ -67,9 +66,13 @@ public class VehicleServiceTest {
         Double load = 100.0;
 
         // then
-        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
-        assertEquals(1, expectedVehicles.size());
-        assertEquals(1, expectedVehicles.get(0).getId());
+        try {
+            List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+            assertEquals(1, expectedVehicles.size());
+            assertEquals(1, expectedVehicles.get(0).getId());
+        } catch (NotEnoughVehiclesException e) {
+            fail();
+        }
     }
 
     @Test
@@ -78,9 +81,13 @@ public class VehicleServiceTest {
         Double load = 50.0;
 
         // then
-        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
-        assertEquals(1, expectedVehicles.size());
-        assertEquals(1, expectedVehicles.get(0).getId());
+        try {
+            List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+            assertEquals(1, expectedVehicles.size());
+            assertEquals(1, expectedVehicles.get(0).getId());
+        } catch (NotEnoughVehiclesException e) {
+            fail();
+        }
     }
 
     @Test
@@ -89,9 +96,13 @@ public class VehicleServiceTest {
         Double load = 150.0;
 
         // then
-        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
-        assertEquals(1, expectedVehicles.size());
-        assertEquals(2, expectedVehicles.get(0).getId());
+        try {
+            List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+            assertEquals(1, expectedVehicles.size());
+            assertEquals(2, expectedVehicles.get(0).getId());
+        } catch (NotEnoughVehiclesException e) {
+            fail();
+        }
     }
 
     @Test
@@ -100,9 +111,13 @@ public class VehicleServiceTest {
         Double load = 250.0;
 
         // then
-        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
-        assertEquals(1, expectedVehicles.size());
-        assertEquals(3, expectedVehicles.get(0).getId());
+        try {
+            List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+            assertEquals(1, expectedVehicles.size());
+            assertEquals(3, expectedVehicles.get(0).getId());
+        } catch (NotEnoughVehiclesException e) {
+            fail();
+        }
     }
 
     @Test
@@ -111,12 +126,16 @@ public class VehicleServiceTest {
         Double load = 950.0;
 
         // then
-        List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
-        assertEquals(4, expectedVehicles.size());
-        assert(expectedVehicles.contains(vehicle1));
-        assert(expectedVehicles.contains(vehicle2));
-        assert(expectedVehicles.contains(vehicle3));
-        assert(expectedVehicles.contains(vehicle4));
+        try {
+            List<VehicleDto> expectedVehicles = vehicleService.findVehiclesForRouteHelper(load, vehicles);
+            assertEquals(4, expectedVehicles.size());
+            assert(expectedVehicles.contains(vehicle1));
+            assert(expectedVehicles.contains(vehicle2));
+            assert(expectedVehicles.contains(vehicle3));
+            assert(expectedVehicles.contains(vehicle4));
+        } catch (NotEnoughVehiclesException e) {
+            fail();
+        }
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.google.maps.model.DirectionsResult;
 import org.springframework.stereotype.Service;
 import ztw.nextapp.domain.*;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.repositories.DeliveryPointRepository;
 import ztw.nextapp.repositories.DeliveryRepository;
 import ztw.nextapp.repositories.PersonRepository;
@@ -86,8 +87,8 @@ public class DeliveryServiceImpl implements DeliveryService {
     public void deleteById(Long aLong) throws IllegalOperationException {
         Optional<Delivery> delivery = deliveryRepository.findById(aLong);
         if (delivery.isPresent()) {
-            deliveryRepository.deleteById(aLong);
             deliveryVehicleService.deleteByDeliveryId(aLong);
+            deliveryRepository.deleteById(aLong);
         }
         else
             throw new IllegalOperationException();
@@ -104,7 +105,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
     }
 
-    private void assignVehiclesToDelivery(Long deliveryId) {
+    private void assignVehiclesToDelivery(Long deliveryId) throws NotEnoughVehiclesException {
         System.out.println("przydzielalo pojazdy");
         Optional<Delivery> deliveryOptional = deliveryRepository.findById(deliveryId);
 
@@ -112,10 +113,15 @@ public class DeliveryServiceImpl implements DeliveryService {
             Delivery delivery = deliveryOptional.get();
             List<VehicleDto> vehicles = vehicleService.findVehiclesForRoute(delivery.getCapacity());
             ArrayList<Person> employees = new ArrayList<>();
+            List<Person> allEmployees = employeeRepository.findEmployees();
 
             System.out.println("przed petla");
             System.out.println("liczba pojazdow: " + vehicles.size());
             System.out.println("liczba pracownikow: " + employees.size());
+
+            if (vehicles.size() > allEmployees.size()) {
+                throw new NotEnoughVehiclesException();
+            }
 
             while (employees.size() < vehicles.size()) {
                 Person employee = findEmployee();
@@ -125,6 +131,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 if (!employees.contains(employee)) {
                     employees.add(employee);
                 }
+
                 System.out.println("pracownicy: " + employees.size());
             }
             System.out.println("pracoownicy po petli: " + employees.size());
@@ -190,7 +197,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     @Override
-    public Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException {
+    public Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException, NotEnoughVehiclesException {
         System.out.println("weszlo");
 
         if (!validatePoint(deliveryDto.getOrigin()) || !validatePoint(deliveryDto.getDestination())) {

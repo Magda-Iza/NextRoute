@@ -101,7 +101,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<VehicleDto> findVehiclesForRoute(Double load) {
+    public List<VehicleDto> findVehiclesForRoute(Double load) throws NotEnoughVehiclesException {
         List<VehicleDto> allVehicles = findAll();
         List<VehicleDto> vehiclesForRoute;
 
@@ -128,7 +128,7 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicles.get(left);
     }
 
-    public List<VehicleDto> findVehiclesForRouteHelper(Double load, List<VehicleDto> vehicles) {
+    public List<VehicleDto> findVehiclesForRouteHelper(Double load, List<VehicleDto> vehicles) throws NotEnoughVehiclesException {
         vehicles.sort(Comparator.comparing(VehicleDto::getCapacity));
         List<VehicleDto> vehiclesForRoute = new ArrayList<>();
         Double currentLoad = load;

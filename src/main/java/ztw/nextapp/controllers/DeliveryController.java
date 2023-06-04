@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ztw.nextapp.domain.Delivery;
 import ztw.nextapp.domain.DeliveryPoint;
 import ztw.nextapp.exceptions.IllegalOperationException;
+import ztw.nextapp.exceptions.NotEnoughVehiclesException;
 import ztw.nextapp.services.DeliveryService;
 import ztw.nextapp.services.RouteService;
 import ztw.nextapp.services.VehicleService;
@@ -132,6 +133,9 @@ public class DeliveryController {
         } catch (IllegalOperationException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        } catch (NotEnoughVehiclesException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

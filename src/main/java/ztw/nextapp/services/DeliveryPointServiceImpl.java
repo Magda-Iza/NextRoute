@@ -108,9 +108,6 @@ public class DeliveryPointServiceImpl implements DeliveryPointService {
         Optional<DeliveryPoint> pointOptionalWithoutChars = deliveryPointRepository
                 .findByName(removeSpecialCharacters(pointDto.getName()));
 
-        System.out.println("normalna nazwa: " + pointDto.getName());
-        System.out.println("bez znakow: " + removeSpecialCharacters(pointDto.getName()));
-
         if (pointOptional.isPresent() || pointOptionalWithoutChars.isPresent()) {
             System.out.println("Point already exists");
             return null;

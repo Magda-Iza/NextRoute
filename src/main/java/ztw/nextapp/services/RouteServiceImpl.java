@@ -95,13 +95,9 @@ public class RouteServiceImpl implements RouteService {
 
         if (pointOptional.isPresent()) {
             DeliveryPoint point = pointOptional.get();
-            System.out.println("znamy punkt");
-            System.out.println("id punktu: " + point.getId() + " nazwa " + point.getName());
             routePointRepository.save(routeId, point.getId());
         } else if (pointOptionalWithoutChars.isPresent()){
             DeliveryPoint point = pointOptionalWithoutChars.get();
-            System.out.println("znamy punkt");
-            System.out.println("id punktu: " + point.getId() + " nazwa " + point.getName());
             routePointRepository.save(routeId, point.getId());
         } else {
             throw new IllegalOperationException();
@@ -172,45 +168,4 @@ public class RouteServiceImpl implements RouteService {
             return null;
         }
     }
-
-//    @Override
-//    public DirectionsResult getDirectionsResult(String origin, String destination, ArrayList<String> waypoints) {
-//        DirectionsApiRequest directionsApiRequest = DirectionsApi.newRequest(geoApiContext);
-//        directionsApiRequest.origin(origin);
-//        directionsApiRequest.destination(destination);
-//        directionsApiRequest.mode(TravelMode.DRIVING);
-//        directionsApiRequest.optimizeWaypoints(true);
-//        directionsApiRequest.waypoints(waypoints.toArray(new String[waypoints.size()]));
-//
-//        try {
-//            DirectionsResult result = directionsApiRequest.await();
-//            return result.routes[0];
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
-//    @Override
-//    public DirectionsRoute createRoute(String capacity, String driverId, String origin, String destination, ArrayList<String> waypoints) {
-//        DirectionsRoute directionsRoute = getDirections(origin, destination, waypoints);
-//        ArrayList<String> resultRoute = new ArrayList<>();
-//        Duration duration = new Duration();
-//        resultRoute.add(origin);
-//
-//        for (int i = 0; i < directionsRoute.legs.length; i++) {
-//            resultRoute.add(directionsRoute.legs[i].endAddress);
-//            duration.inSeconds += directionsRoute.legs[i].duration.inSeconds;
-//        }
-//
-//        System.out.println("Seconds: " + duration.inSeconds);
-//        System.out.println("Minutes: " + duration.inSeconds / 60);
-//        System.out.println("Hours: " + duration.inSeconds / 3600);
-//        System.out.println("Summary: " + directionsRoute.summary);
-//        System.out.println("Route: " + directionsRoute);
-//        System.out.println("Route: " + resultRoute);
-//
-//        return directionsRoute;
-//    }
-
 }

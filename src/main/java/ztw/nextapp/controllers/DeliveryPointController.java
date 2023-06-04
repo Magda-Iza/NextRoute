@@ -44,19 +44,14 @@ public class DeliveryPointController {
     @PostMapping("/points")
     public ResponseEntity<DeliveryPoint> createDeliveryPoint(@RequestBody DeliveryPointDto pointDto) {
         try {
-            System.out.println("Przed " + pointDto.getName());
             DeliveryPoint point = deliveryPointService.createDeliveryPoint(pointDto);
 
             if (point == null) {
-                System.out.println("Zlapal " + pointDto.getName());
                 return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
             }
 
-            System.out.println("Nie zlapal " + pointDto.getName());
-
             return new ResponseEntity<>(point, HttpStatus.CREATED);
         } catch (Exception e) {
-            System.out.println("blad " + e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

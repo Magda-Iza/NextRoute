@@ -39,7 +39,6 @@ public class MapController {
         waypoints.add("Kościuszki, Wrocław, Polska");
         waypoints.add("Kleczkowska, Wrocław, Polska");
         waypoints.add("plac Grunwaldzki, Wrocław, Polska");
-//        routeService.createRoute("test", "test", origin, destination, waypoints);
         return "Microservice MapController is working!";
     }
 
@@ -47,21 +46,6 @@ public class MapController {
     public String map() {
         return "Microservice MapController is working!";
     }
-
-//    @GetMapping("/getGeocoding")
-//    public Response getGeocoding(@RequestParam String address) {
-//        UriComponents uri = UriComponentsBuilder.newInstance()
-//                .scheme("https")
-//                .host("maps.googleapis.com")
-//                .path("/maps/api/geocode/json")
-//                .queryParam("key", API_KEY)
-//                .queryParam("address", address)
-//                .build();
-//
-//        ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
-//        System.out.println(response.getBody());
-//        return response.getBody();
-//    }
 
     @GetMapping("/getGeocoding")
     public LatLng getGeocoding() {

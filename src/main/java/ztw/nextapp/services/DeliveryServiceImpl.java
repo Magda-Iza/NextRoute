@@ -243,7 +243,12 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery savedDelivery = deliveryRepository.save(delivery);
 
         System.out.println("weszlo w przydzielanie pojazdow");
-        assignVehiclesToDelivery(savedDelivery.getId());
+        try {
+            assignVehiclesToDelivery(savedDelivery.getId());
+        } catch (NotEnoughVehiclesException e) {
+            deliveryRepository.delete(savedDelivery.getId());
+            throw new NotEnoughVehiclesException();
+        }
 
         return savedDelivery;
     }

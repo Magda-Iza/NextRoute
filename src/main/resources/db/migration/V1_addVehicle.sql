@@ -1,0 +1,1 @@
+INSERT INTO dbo.vehicles VALUES ('Ford', 2.0, 'Transporter', '2011-03-09', 'WOV7D9EB6L4062278');

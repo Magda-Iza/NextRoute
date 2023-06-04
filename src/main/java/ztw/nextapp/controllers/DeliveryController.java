@@ -34,10 +34,11 @@ public class DeliveryController {
         this.vehicleService = vehicleService;
     }
 
-    @GetMapping("employee/deliveries")
-    public ResponseEntity<List<DeliveryDto>> getEmployeeDeliveries() {
+    @GetMapping("employee/deliveries/{name}")
+    public ResponseEntity<List<DeliveryDto>> getEmployeeDeliveries(@PathVariable("name") String name) {
+        System.out.print(name);
         try {
-            List<DeliveryDto> deliveries = deliveryService.getDeliveries();
+            List<DeliveryDto> deliveries = deliveryService.getEmployeeDeliveries(name);
 
             if (deliveries.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -89,6 +90,16 @@ public class DeliveryController {
         }
     }
 
+    @PutMapping(value="deliveries/{id}/{name}")
+    public ResponseEntity<DeliveryDto>  assignEmployeeToDelivery(@PathVariable("id") String id, @PathVariable("name") String name) {
+        DeliveryDto deliveryDto;
+
+
+        deliveryDto = deliveryService.assignEmployeeToDelivery(Long.valueOf(id), name);
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+
+    }
+
     @GetMapping("employee/delivery/{id}")
     public ResponseEntity<DeliveryDto> getDeliveryEmployeeById(@PathVariable("id") long id) {
         DeliveryDto delivery;
@@ -119,8 +130,10 @@ public class DeliveryController {
             Delivery deliveryResult = deliveryService.createDelivery(delivery);
             return new ResponseEntity<>(deliveryResult, HttpStatus.CREATED);
         } catch (IllegalOperationException e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

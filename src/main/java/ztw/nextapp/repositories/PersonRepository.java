@@ -34,7 +34,12 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     @Query(nativeQuery = true, value = "UPDATE employees SET employees.role = ?1 WHERE employees.id = ?2")
     void setRole(String role, Long employeeId);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM employees WHERE role = 2")
+    @Query(nativeQuery = true, value = "SELECT * FROM employees WHERE role = 3")
     List<Person> findEmployees();
 
+    @Query(nativeQuery = true, value = "SELECT * FROM employees WHERE role = ?1")
+    List<Person> findByRole(int role);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM employees  WHERE employees.email LIKE '%' + ?1 + '%'")
+    Person findByName(String name);
 }

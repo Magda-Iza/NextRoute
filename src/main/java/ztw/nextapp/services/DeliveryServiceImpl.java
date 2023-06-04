@@ -17,10 +17,7 @@ import ztw.nextapp.web.model.VehicleDto;
 
 import javax.transaction.Transactional;
 import java.text.Normalizer;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -108,14 +105,37 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     private void assignVehiclesToDelivery(Long deliveryId) {
+        System.out.println("przydzielalo pojazdy");
         Optional<Delivery> deliveryOptional = deliveryRepository.findById(deliveryId);
 
         if (deliveryOptional.isPresent()) {
             Delivery delivery = deliveryOptional.get();
             List<VehicleDto> vehicles = vehicleService.findVehiclesForRoute(delivery.getCapacity());
+            ArrayList<Person> employees = new ArrayList<>();
 
-            for (VehicleDto vehicle : vehicles) {
-                deliveryVehicleService.save(new DeliveryVehicle(delivery, vehicleMapper.vehicleDtoToVehicle(vehicle)));
+            System.out.println("przed petla");
+            System.out.println("liczba pojazdow: " + vehicles.size());
+            System.out.println("liczba pracownikow: " + employees.size());
+
+            while (employees.size() < vehicles.size()) {
+                Person employee = findEmployee();
+
+                System.out.println("w petli");
+
+                if (!employees.contains(employee)) {
+                    employees.add(employee);
+                }
+                System.out.println("pracownicy: " + employees.size());
+            }
+            System.out.println("pracoownicy po petli: " + employees.size());
+            System.out.println("po petli");
+
+            for (int i = 0; i < vehicles.size(); i++) {
+                deliveryVehicleService.save(DeliveryVehicle.builder()
+                        .delivery(delivery)
+                        .vehicle(vehicleMapper.vehicleDtoToVehicle(vehicles.get(i)))
+                        .person(employees.get(i))
+                        .build());
             }
         }
     }
@@ -150,6 +170,26 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     @Override
+    public DeliveryDto  assignEmployeeToDelivery(Long deliveryId, String name) {
+        Optional<Delivery> deliveryOptional = deliveryRepository.findById(deliveryId);
+        Person employee = employeeRepository.findByName(name);
+        System.out.println("przypisuje pracownika");
+        System.out.println("pracownik: " + employee.getName());
+
+        if (deliveryOptional.isPresent()) {
+            Delivery delivery = deliveryOptional.get();
+            delivery.setEmployee(employee);
+            deliveryRepository.update(delivery.getId(), delivery.getDeliveryStart(), delivery.getDeliveryEnd(), delivery.getCapacity(), delivery.getEmployee().getId(), null, delivery.getRoute().getId());
+
+            return deliveryMapper.deliveryToDeliveryDto(delivery);
+        }
+
+        return null;
+    }
+
+
+    @Transactional
+    @Override
     public Delivery createDelivery(DeliveryDto deliveryDto) throws IllegalOperationException {
         System.out.println("weszlo");
 
@@ -163,11 +203,17 @@ public class DeliveryServiceImpl implements DeliveryService {
             }
         }
 
+        System.out.println("tworzylo");
         Route route = new Route();
         System.out.println(deliveryDto.getOrigin());
         System.out.println(deliveryDto.getDestination());
         System.out.println(deliveryDto.getPoints());
         System.out.println(deliveryDto.getCapacity());
+        System.out.println(deliveryDto.getDeliveryStart());
+        System.out.println(deliveryDto.getDeliveryEnd());
+//        System.out.println(deliveryDto.getEmployee().getName());
+
+//        Person employee = employeeRepository.findByName(deliveryDto.getEmployee().getName());
 
         route.setOrigin(deliveryDto.getOrigin());
         route.setDestination(deliveryDto.getDestination());
@@ -188,6 +234,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         System.out.println("wyszlo");
         Delivery savedDelivery = deliveryRepository.save(delivery);
+
+        System.out.println("weszlo w przydzielanie pojazdow");
         assignVehiclesToDelivery(savedDelivery.getId());
 
         return savedDelivery;
@@ -195,8 +243,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     private Person findEmployee() {
         List<Person> employees = employeeRepository.findEmployees();
+//        List<Person> employees = employeeRepository.findByRole(3);
+        System.out.println("znaleziono kierowcow: " + employees.size());
         Random random = new Random();
-        int p = random.nextInt(0) + employees.size();
+        int p = random.nextInt(employees.size());
+        System.out.println("wylosowano: " + p);
         return employees.get(p);
     }
 
@@ -214,6 +265,15 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public List<DeliveryDto> getDriverDeliveries(String name) {
         List<Delivery> deliveries = deliveryRepository.findByDriverName(name);
+
+        return deliveries.stream()
+                .map(deliveryMapper::deliveryToDeliveryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DeliveryDto> getEmployeeDeliveries(String name) {
+        List<Delivery> deliveries = deliveryRepository.findByEmployeeName(name);
 
         return deliveries.stream()
                 .map(deliveryMapper::deliveryToDeliveryDto)

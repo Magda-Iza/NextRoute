@@ -20,6 +20,8 @@ public interface DeliveryService extends BaseService<Delivery, Long> {
 
     List<DeliveryDto> getDriverDeliveries(String name);
 
+    List<DeliveryDto> getEmployeeDeliveries(String name);
+
     DeliveryDto getDeliverByRouteIdDriverId(Long routeId, Long driverId);
 
     DeliveryDto findDeliveryById(long id);
@@ -29,4 +31,6 @@ public interface DeliveryService extends BaseService<Delivery, Long> {
     List<DeliveryPointDto> getDeliveryRoutePoints(Long deliveryId);
 
     DeliveryDto getNewDelivery();
+
+    DeliveryDto assignEmployeeToDelivery(Long deliveryId, String name);
 }

@@ -1,5 +1,6 @@
 package ztw.nextapp.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,10 +20,12 @@ public class DeliveryVehicle extends BaseEntity {
         super(id);
     }
 
-    public DeliveryVehicle(Delivery delivery, Vehicle vehicle) {
-        super();
+    @Builder
+    public DeliveryVehicle(Long id, Delivery delivery, Vehicle vehicle, Person person) {
+        super(id);
         this.delivery = delivery;
         this.vehicle = vehicle;
+        this.person = person;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

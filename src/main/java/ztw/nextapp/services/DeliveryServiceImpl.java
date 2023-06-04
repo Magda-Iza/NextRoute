@@ -101,7 +101,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         if (deliveryOptional.isPresent()) {
             Delivery delivery = deliveryOptional.get();
-            deliveryRepository.update(id, deliveryDto.getDeliveryStart(), deliveryDto.getDeliveryEnd(), deliveryDto.getCapacity(), delivery.getEmployee().getId(), delivery.getPerson().getId(), delivery.getRoute().getId());
+            deliveryRepository.update(id, deliveryDto.getDeliveryStart(), deliveryDto.getDeliveryEnd(), deliveryDto.getCapacity(), delivery.getEmployee().getId(), null, delivery.getRoute().getId());
         }
     }
 
